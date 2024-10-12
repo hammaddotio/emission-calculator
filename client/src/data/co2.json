@@ -1,0 +1,47 @@
+[
+    {
+        "typeOfFuel": "Gas/diesel oil",
+        "co2EmissionFactor": 2.775,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Motor gasoline",
+        "co2EmissionFactor": 2.35,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Biodiesel (100%)",
+        "co2EmissionFactor": 1.928,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Natural gas liquids",
+        "co2EmissionFactor": 1.574,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Ethanol (100%)",
+        "co2EmissionFactor": 2.776,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Liquefied petroleum gases (LPG)",
+        "co2EmissionFactor": 1.653,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Aviation gasoline",
+        "co2EmissionFactor": 2.224,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "Kerosene type jet fuel",
+        "co2EmissionFactor": 2.538,
+        "emissionFactorUnit": "kg/L"
+    },
+    {
+        "typeOfFuel": "CNG",
+        "co2EmissionFactor": 2.78,
+        "emissionFactorUnit": "kg/kg"
+    }
+]
