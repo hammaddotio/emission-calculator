@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, InputNumber, Button, Select, message } from 'antd';
 import axios from 'axios';
+import { REFRIGERANT_API } from '../../../../utils/api/apis';
 
 // Define the data type for refrigerant records
 interface RefrigerantRecord {
@@ -62,17 +63,21 @@ const RefrigerantEmissionCalculator: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     const handleChange = (index: number, field: keyof RefrigerantRecord, value?: number) => {
-        const newRefrigerants = [...refrigerants];
-        newRefrigerants[index][field] = value !== undefined ? value : 0;
+        const newRefrigerants: any = [...refrigerants];
+
+        // Set to 0 if value is undefined or null
+        newRefrigerants[index][field] = value !== undefined && value !== null ? value : 0;
 
         // Update emissions after changing any value
         const { amountBeginning, amountPurchased, amountDisposed, amountEnd, gwp } = newRefrigerants[index];
-        const emissions = (amountBeginning + amountPurchased - amountDisposed - amountEnd) * gwp / 1000;
+        const emissions = ((amountBeginning + amountPurchased - amountDisposed - amountEnd) * gwp) / 1000 || 0;
 
-        // Set the updated emissions and refrigerants
+        // Set the updated emissions
         newRefrigerants[index].emissions = emissions;
         setRefrigerants(newRefrigerants);
     };
+
+    const totalEmissions = refrigerants.reduce((total, record) => total + record.emissions, 0);
 
     const addRefrigerant = (selectedRefrigerants: string[]) => {
         const newRefrigerants = selectedRefrigerants.map((type) => {
@@ -93,7 +98,11 @@ const RefrigerantEmissionCalculator: React.FC = () => {
     const callApi = async () => {
         try {
             setLoading(true);
-            const response = await axios.post('http://127.0.0.1:3000/api/v1/refrigerant', refrigerants);
+            const payload = {
+                refrigerants,
+                totalEmissions,
+            };
+            const response = await axios.post(`${REFRIGERANT_API}`, payload);
             message.success(response.data.message);
         } catch (error) {
             message.error('API call failed: ' + (error as Error).message);
@@ -110,8 +119,6 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             !record.amountEnd
         );
     };
-
-    const totalEmissions = refrigerants.reduce((total, record) => total + record.emissions, 0);
 
     const columns = [
         {

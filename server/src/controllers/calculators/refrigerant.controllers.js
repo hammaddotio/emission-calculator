@@ -1,75 +1,82 @@
-import Refrigerant from '../../models/calculators/refrigerant.model.js';
+// controllers/refrigerantController.js
+import { Refrigerant } from '../../models/calculators/refrigerant.model.js';
+import { validateRefrigerantData } from '../../validators/RefrigerantValidator.js'
 
-// Create multiple refrigerant records
-export const createRefrigerant = async (req, res) => {
-    const refrigerantData = req.body; // This should be an array of refrigerant objects
+// Create new refrigerant data
+export const createRefrigerantData = async (req, res) => {
+    console.log(req.body)
+    const { error } = validateRefrigerantData(req.body);
+    if (error) {
+        return res.status(400).json({
+            status: false,
+            message: 'Validation error',
+            error: error
+        });
+    }
 
     try {
-        // Create multiple refrigerant records using Mongoose
-        const refrigerants = await Refrigerant.insertMany(refrigerantData);
-        res.status(201).json({ success: true, message: 'Refrigerants created successfully', data: refrigerants });
+        const refrigerantData = new Refrigerant(req.body);
+        await refrigerantData.save();
+        res.status(201).json({ status: true, message: 'Refrigerant data saved successfully', error: null });
     } catch (error) {
-        console.error('Error creating refrigerants:', error);
-        res.status(500).json({ success: false, message: 'Error creating refrigerants', error: error.message });
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Error saving refrigerant data', error: error.message });
     }
 };
 
-// Get all refrigerant records
-export const getAllRefrigerants = async (req, res) => {
+// Read all refrigerant data
+export const getRefrigerantData = async (req, res) => {
     try {
-        const refrigerants = await Refrigerant.find();
-        res.status(200).json({ success: true, message: 'Refrigerants fetched successfully', data: refrigerants });
+        const refrigerantData = await Refrigerant.find();
+        res.status(200).json({
+            status: true,
+            message: 'Refrigerant data fetched successfully',
+            error: null,
+            data: refrigerantData.length ? refrigerantData : null
+        });
     } catch (error) {
-        console.error('Error fetching refrigerants:', error);
-        res.status(500).json({ success: false, message: 'Error fetching refrigerants', error: error.message });
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Error fetching refrigerant data', error: error.message });
     }
 };
 
-// Get a refrigerant record by ID
-export const getRefrigerantById = async (req, res) => {
+// Update refrigerant data by ID
+export const updateRefrigerantData = async (req, res) => {
+    const { id } = req.params;
+
+    const { error } = validateRefrigerantData(req.body);
+    if (error) {
+        return res.status(400).json({
+            status: false,
+            message: 'Validation error',
+            error: error.details.map(err => err.message)
+        });
+    }
+
+    try {
+        const updatedData = await RefrigerantData.Refrigerant(id, req.body, { new: true });
+        if (!updatedData) {
+            return res.status(404).json({ status: false, message: 'Refrigerant data not found', error: null });
+        }
+        res.status(200).json({ status: true, message: 'Refrigerant data updated successfully', error: null });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Error updating refrigerant data', error: error.message });
+    }
+};
+
+// Delete refrigerant data by ID
+export const deleteRefrigerantData = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const refrigerant = await Refrigerant.findById(id);
-        if (!refrigerant) {
-            return res.status(404).json({ success: false, message: 'Refrigerant not found' });
+        const deletedData = await Refrigerant.findByIdAndDelete(id);
+        if (!deletedData) {
+            return res.status(404).json({ status: false, message: 'Refrigerant data not found', error: null });
         }
-        res.status(200).json({ success: true, message: 'Refrigerant fetched successfully', data: refrigerant });
+        res.status(200).json({ status: true, message: 'Refrigerant data deleted successfully', error: null });
     } catch (error) {
-        console.error('Error fetching refrigerant:', error);
-        res.status(500).json({ success: false, message: 'Error fetching refrigerant', error: error.message });
-    }
-};
-
-// Update a refrigerant record by ID
-export const updateRefrigerant = async (req, res) => {
-    const { id } = req.params;
-    const updates = req.body;
-
-    try {
-        const refrigerant = await Refrigerant.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
-        if (!refrigerant) {
-            return res.status(404).json({ success: false, message: 'Refrigerant not found' });
-        }
-        res.status(200).json({ success: true, message: 'Refrigerant updated successfully', data: refrigerant });
-    } catch (error) {
-        console.error('Error updating refrigerant:', error);
-        res.status(500).json({ success: false, message: 'Error updating refrigerant', error: error.message });
-    }
-};
-
-// Delete a refrigerant record by ID
-export const deleteRefrigerant = async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const refrigerant = await Refrigerant.findByIdAndDelete(id);
-        if (!refrigerant) {
-            return res.status(404).json({ success: false, message: 'Refrigerant not found' });
-        }
-        res.status(204).json({ success: true, message: 'Refrigerant deleted successfully' }); // No content to send back
-    } catch (error) {
-        console.error('Error deleting refrigerant:', error);
-        res.status(500).json({ success: false, message: 'Error deleting refrigerant', error: error.message });
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Error deleting refrigerant data', error: error.message });
     }
 };

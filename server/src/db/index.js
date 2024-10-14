@@ -9,5 +9,6 @@ export const connectDB = async () => {
         await connect('mongodb+srv://userfree761:4DeniRAgs2e5qgy@cluster0.fqdp3.mongodb.net/calculator')
     } catch (error) {
         console.log(`DB Connection ERROR: ${error.message}`)
+        process.exit(1)
     }
 }

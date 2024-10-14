@@ -1,36 +1,19 @@
+// models/Refrigerant.js
 import mongoose from 'mongoose';
 
-const refrigerantSchema = new mongoose.Schema({
-    refrigerantType: {
-        type: String,
-        required: true,
-    },
-    amountBeginning: {
-        type: Number,
-        required: true,
-    },
-    amountPurchased: {
-        type: Number,
-        required: true,
-    },
-    amountDisposed: {
-        type: Number,
-        required: true,
-    },
-    amountEnd: {
-        type: Number,
-        required: true,
-    },
-    gwp: {
-        type: Number,
-        required: true,
-    },
-    // emissions: {
-    //     type: Number,
-    //     required: true,
-    // },
+const refrigerantDataSchema = new mongoose.Schema({
+    amountBeginning: { type: Number, required: true },
+    amountDisposed: { type: Number, required: true },
+    amountEnd: { type: Number, required: true },
+    amountPurchased: { type: Number, required: true },
+    emissions: { type: Number, required: true },
+    gwp: { type: Number, required: true },
+    refrigerantType: { type: String, required: true },
 });
 
-const Refrigerant = mongoose.model('Refrigerant', refrigerantSchema);
+const refrigerantSchema = new mongoose.Schema({
+    refrigerants: [refrigerantDataSchema],
+    totalEmissions: { type: Number, required: true },
+});
 
-export default Refrigerant;
+export const Refrigerant = mongoose.model('Refrigerant', refrigerantSchema);

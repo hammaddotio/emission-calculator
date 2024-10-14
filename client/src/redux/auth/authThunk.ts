@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { User } from './authTypes';
 import { URL } from './utils/link';
+import { LOGIN_API, REGISTER_API } from '../../utils/api/apis';
 
 // Async thunk for login
 export const loginUser = createAsyncThunk<
@@ -15,8 +16,10 @@ export const loginUser = createAsyncThunk<
   async (credentials: { email: string; password: string }, { rejectWithValue }:any) => {
     try {
       const response = await axios.post<{ token: string; user: User }>(
-        `${URL}/api/auth/login`, 
-        credentials
+        `${LOGIN_API}`, 
+        credentials,
+        // { withCredentials: true },
+        
       );
       localStorage.setItem('token', response.data.token); // Store token in local storage
       return response.data.user; // Return user data
@@ -36,8 +39,9 @@ export const registerUser = createAsyncThunk<
   async (userData: { name: string; email: string; password: string }, { rejectWithValue }:any) => {
     try {
       const response = await axios.post<{ user: User }>(
-        `${URL}/api/auth/register`, 
-        userData
+        `${REGISTER_API}`, 
+        userData,
+        {withCredentials: true}
       );
       return response.data.user; // Return user data
     } catch (error) {

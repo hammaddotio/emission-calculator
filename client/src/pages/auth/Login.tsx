@@ -20,7 +20,7 @@ const Login: React.FC = () => {
 
             if (loginUser.fulfilled.match(resultAction)) {
                 message.success('Login successful!');
-                navigate('/');
+                navigate('/calculators');
             } else {
                 // If login failed, display the error returned from the API
                 message.error(error || 'Login failed. Please check your credentials.');

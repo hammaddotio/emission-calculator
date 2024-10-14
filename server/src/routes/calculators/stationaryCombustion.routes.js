@@ -11,18 +11,18 @@ import {
 const router = express.Router();
 
 // Create a new StationaryCombustion emission entry
-router.post('/stationary-combustion', createStationaryCombustionData); // Changed to /stationary-combustion
+router.post('/', createStationaryCombustionData);
 
 // Get all StationaryCombustion emissions
-router.get('/stationary-combustion', getAllStationaryCombustionData); // Changed to /stationary-combustion
+router.get('/', getAllStationaryCombustionData);
 
 // Get a single StationaryCombustion emission by ID
-router.get('/stationary-combustion/:id', getStationaryCombustionDataById); // Changed to /stationary-combustion/:id
+router.get('/:id', getStationaryCombustionDataById);
 
 // Update a StationaryCombustion emission by ID
-router.put('/stationary-combustion/:id', updateStationaryCombustionData); // Changed to /stationary-combustion/:id
+router.put('/:id', updateStationaryCombustionData);
 
 // Delete a StationaryCombustion emission by ID
-router.delete('/stationary-combustion/:id', deleteStationaryCombustionData); // Changed to /stationary-combustion/:id
+router.delete('/:id', deleteStationaryCombustionData);
 
 export default router;

@@ -1,27 +1,23 @@
 import express from 'express';
 import {
-    createRefrigerant,
-    getAllRefrigerants,
-    getRefrigerantById,
-    updateRefrigerant,
-    deleteRefrigerant
+    createRefrigerantData,
+    getRefrigerantData,
+    updateRefrigerantData,
+    deleteRefrigerantData,
 } from '../../controllers/calculators/refrigerant.controllers.js';
 
 const router = express.Router();
 
-// Create a new refrigerant record
-router.post('/refrigerant', createRefrigerant);
+// Create new refrigerant data
+router.post('/', createRefrigerantData);
 
-// Get all refrigerant records
-router.get('/refrigerant', getAllRefrigerants);
+// Read all refrigerant data
+router.get('/', getRefrigerantData);
 
-// Get a refrigerant record by ID
-router.get('/refrigerant/:id', getRefrigerantById);
+// Update refrigerant data by ID
+router.put('/:id', updateRefrigerantData);
 
-// Update a refrigerant record by ID
-router.put('/refrigerant/:id', updateRefrigerant);
-
-// Delete a refrigerant record by ID
-router.delete('/refrigerant/:id', deleteRefrigerant);
+// Delete refrigerant data by ID
+router.delete('/:id', deleteRefrigerantData);
 
 export default router;

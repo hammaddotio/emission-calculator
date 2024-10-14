@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, InputNumber, Button, message } from 'antd';
+import { Table, Button, message, Input } from 'antd';
 import axios from 'axios';
 import { MOBILE_COMBUSTION_API } from '../../../../utils/api/apis';
 
@@ -32,21 +32,26 @@ const FuelEmissionCalculator: React.FC = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (index: number, field: keyof FuelRecord, value: number) => {
+    const handleChange = (index: number, field: keyof FuelRecord, value: string) => {
         const newRecords: any = [...fuelRecords];
-        newRecords[index][field] = value;
+        const parsedValue = parseFloat(value);
 
-        // Calculate emissions based on input
-        const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
-        const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
-        const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
+        // If the parsed value is NaN or negative, don't change it
+        if (!isNaN(parsedValue)) {
+            newRecords[index][field] = parsedValue;
 
-        newRecords[index].co2Emissions = co2Emissions;
-        newRecords[index].ch4Emissions = ch4Emissions;
-        newRecords[index].n2oEmissions = n2oEmissions;
-        newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
+            // Calculate emissions based on input
+            const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
+            const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
+            const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
 
-        setFuelRecords(newRecords);
+            newRecords[index].co2Emissions = co2Emissions;
+            newRecords[index].ch4Emissions = ch4Emissions;
+            newRecords[index].n2oEmissions = n2oEmissions;
+            newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
+
+            setFuelRecords(newRecords);
+        }
     };
 
     const addFuelRecord = () => {
@@ -67,7 +72,6 @@ const FuelEmissionCalculator: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        console.log(fuelRecords)
         setLoading(true);
         try {
             const response = await axios.post(`${MOBILE_COMBUSTION_API}`, fuelRecords);
@@ -98,11 +102,13 @@ const FuelEmissionCalculator: React.FC = () => {
             title: 'Amount of Fuel Used (liters)',
             dataIndex: 'amount',
             render: (text: number, record: FuelRecord, index: number) => (
-                <InputNumber
-                    value={record.amount}
-                    onChange={(value) => handleChange(index, 'amount', value ?? 0)}
+                <Input
+                    type="number"
+                    value={record.amount || 0}
+                    onChange={(e) => handleChange(index, 'amount', e.target.value)}
                     min={0}
-                    style={{ width: '100%' }}
+                    placeholder="Enter amount"
+                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
                 />
             ),
         },
@@ -110,11 +116,13 @@ const FuelEmissionCalculator: React.FC = () => {
             title: 'CO₂ Emission Factor',
             dataIndex: 'co2EmissionFactor',
             render: (text: number, record: FuelRecord, index: number) => (
-                <InputNumber
-                    value={record.co2EmissionFactor}
-                    onChange={(value) => handleChange(index, 'co2EmissionFactor', value ?? 0)}
+                <Input
+                    type="number"
+                    value={record.co2EmissionFactor || 0}
+                    onChange={(e) => handleChange(index, 'co2EmissionFactor', e.target.value)}
                     min={0}
-                    style={{ width: '100%' }}
+                    placeholder="Enter CO₂ factor"
+                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
                 />
             ),
         },
@@ -122,11 +130,13 @@ const FuelEmissionCalculator: React.FC = () => {
             title: 'CH₄ Emission Factor',
             dataIndex: 'ch4EmissionFactor',
             render: (text: number, record: FuelRecord, index: number) => (
-                <InputNumber
-                    value={record.ch4EmissionFactor}
-                    onChange={(value) => handleChange(index, 'ch4EmissionFactor', value ?? 0)}
+                <Input
+                    type="number"
+                    value={record.ch4EmissionFactor || 0}
+                    onChange={(e) => handleChange(index, 'ch4EmissionFactor', e.target.value)}
                     min={0}
-                    style={{ width: '100%' }}
+                    placeholder="Enter CH₄ factor"
+                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
                 />
             ),
         },
@@ -134,11 +144,13 @@ const FuelEmissionCalculator: React.FC = () => {
             title: 'N₂O Emission Factor',
             dataIndex: 'n2oEmissionFactor',
             render: (text: number, record: FuelRecord, index: number) => (
-                <InputNumber
-                    value={record.n2oEmissionFactor}
-                    onChange={(value) => handleChange(index, 'n2oEmissionFactor', value ?? 0)}
+                <Input
+                    type="number"
+                    value={record.n2oEmissionFactor || 0}
+                    onChange={(e) => handleChange(index, 'n2oEmissionFactor', e.target.value)}
                     min={0}
-                    style={{ width: '100%' }}
+                    placeholder="Enter N₂O factor"
+                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
                 />
             ),
         },

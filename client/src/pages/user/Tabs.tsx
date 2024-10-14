@@ -4,7 +4,10 @@ import type { TabsProps } from 'antd';
 import Main from './../../layouts/Main';
 import MobileCombustion from '../../components/user/calculators/MobileCombustion/MobileCombustionCalculator';
 import StationaryCombustionWrapper from './../../components/user/calculators/StationaryCombustion/StationaryCombustionWrapper';
-import ACAndRefrigerantsCalculator from './../../components/user/calculators/ACAndRefrigerants/ACAndRefrigerantsCalculator';
+import FireSuppressantsWrapper from '../../components/user/calculators/FireSuppressants/FireSuppressantsWrapper';
+import ACAndRefrigerantsWrapper from '../../components/user/calculators/ACAndRefrigerants/ACAndRefrigerantsWrapper';
+import PurchasedGasWrapper from '../../components/user/calculators/PurchasedGas/PurchasedGasWrapper';
+import ElectricitySupplyWrapper from '../../components/user/calculators/ElectricitySupply/ElectricitySupplyWrapper';
 
 const onChange = (key: string) => {
     console.log(key);
@@ -23,8 +26,23 @@ const TabItems: TabsProps['items'] = [
     },
     {
         key: '3',
+        label: 'Fire Suppressants',
+        children: <FireSuppressantsWrapper />,
+    },
+    {
+        key: '4',
         label: 'AC & Refrigerants',
-        children: <ACAndRefrigerantsCalculator />,
+        children: <ACAndRefrigerantsWrapper />,
+    },
+    {
+        key: '5',
+        label: 'Purchased Gas',
+        children: <PurchasedGasWrapper />,
+    },
+    {
+        key: '6',
+        label: 'Electricity Supply',
+        children: <ElectricitySupplyWrapper />,
     },
 ];
 

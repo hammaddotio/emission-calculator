@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Table, Input, Button, Select, message, Typography, Card } from 'antd';
+import { Table, Input, Button, message, Typography, Card } from 'antd';
 import axios from 'axios';
 import { STATIONARY_COMBUSTION_API } from '../../../../utils/api/apis';
 
-const { Option } = Select;
 const { Title } = Typography;
 
 // Define the emission factors type
@@ -51,7 +50,7 @@ const StationaryCombustion: React.FC = () => {
         const totalN2oEmissions = (n2o * amountUsed) / (1000 * 1000) * 265; // in tonnes
 
         // Total kg CO2e
-        const totalKgCo2e = (totalCo2Emissions) + (totalCh4Emissions) + (totalN2oEmissions); // in kg CO2e
+        const totalKgCo2e = totalCo2Emissions + totalCh4Emissions + totalN2oEmissions; // in kg CO2e
 
         return {
             key: fuelType,
@@ -74,17 +73,16 @@ const StationaryCombustion: React.FC = () => {
         const index = updatedData.findIndex((item: any) => item.key === key);
 
         if (index > -1) {
-            updatedData[index][field] = field === 'amountUsed' ? parseFloat(value) : value;
+            updatedData[index][field] = field === 'amountUsed' ? (value ? parseFloat(value) : 0) : value;
 
             // Update emissions data
-            if (field === 'amountUsed' || field === 'fuelType') {
+            if (field === 'amountUsed') {
                 updateEmissionsData(updatedData);
             } else {
                 setFormData(updatedData);
             }
         }
     };
-
 
     const getTotalEmissions = (data: EmissionData[]) => {
         const totalEmissions = data.reduce((totals, item) => {
@@ -103,10 +101,8 @@ const StationaryCombustion: React.FC = () => {
 
     const calculateEmissions = async () => {
         setError('');
-        // Calculate total emissions
         const totalEmissions = getTotalEmissions(formData);
 
-        // Prepare the payload
         const payload = {
             emissions: formData,
             totalEmissions: {
@@ -122,32 +118,22 @@ const StationaryCombustion: React.FC = () => {
 
     const saveEmissionsData = async (payload: any) => {
         try {
-            console.log(payload)
             const response = await axios.post(`${STATIONARY_COMBUSTION_API}`, payload);
             if (response.data.status) {
                 message.success('Emissions data saved successfully');
             } else {
                 message.error(response.data.message);
-                console.log(response.data.message);
             }
         } catch (error: any) {
             message.error(error.response ? error.response.data.message : error);
-            console.log('Error submitting emissions data:', error.response ? error.response.data.message : error);
         }
     };
-
-
 
     const columns = [
         {
             title: 'Fuel Type',
             dataIndex: 'fuelType',
-            render: (_: any, record: any) => (
-                <Select value={record.fuelType} style={{ width: '100%' }} onChange={(value) => handleInputChange(record.key, 'fuelType', value)}>
-                    <Option value="Diesel">Diesel</Option>
-                    <Option value="Gas">Gas</Option>
-                </Select>
-            ),
+            render: (text: string) => <div>{text}</div>,
         },
         {
             title: 'Amount Used (liters)',
@@ -155,7 +141,7 @@ const StationaryCombustion: React.FC = () => {
             render: (_: any, record: any) => (
                 <Input
                     type="number"
-                    value={record.amountUsed}
+                    value={record.amountUsed || 0}
                     onChange={(e) => handleInputChange(record.key, 'amountUsed', e.target.value)}
                     style={{ width: '100%' }}
                 />
@@ -204,7 +190,6 @@ const StationaryCombustion: React.FC = () => {
                     <p className="font-semibold text-gray-700">Total N2O Emissions: <span className="text-blue-600">{totalEmissions.n2o.toFixed(6)} tonnes</span></p>
                     <p className="font-semibold text-gray-700">Total kg CO2e: <span className="text-blue-600">{totalEmissions.kgCo2e.toFixed(6)} kg</span></p>
                 </div>
-
 
                 <Button type="primary" onClick={calculateEmissions} className="mt-4 w-full" size="large">
                     Calculate & Submit
