@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input, InputNumber, Button, message, Table } from 'antd';
 import axios from 'axios';
 import { ELECTRICITY_SUPPLY_API } from '../../../../utils/api/apis';
+import { headers } from '../../../../utils/api/apiHeaders';
 
 interface MonthData {
     description: string;
@@ -78,7 +79,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
                 totalEmissions // Send total emissions in the API payload
             };
             // API call using Axios
-            await axios.post(`${ELECTRICITY_SUPPLY_API}`, payload);
+            await axios.post(`${ELECTRICITY_SUPPLY_API}`, payload, headers);
 
             message.success('Data submitted successfully!');
         } catch (error) {

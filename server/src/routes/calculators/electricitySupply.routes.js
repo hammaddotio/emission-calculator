@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { auth_middleware } from './../../middlewares/auth.middlewares.js';
 import {
     createElectricitySupply,
     getElectricitySupplies,
@@ -9,11 +10,11 @@ import {
 
 const router = Router();
 
-router.post('/', createElectricitySupply);
-router.get('/', getElectricitySupplies);
-router.get('/:id', getElectricitySupply);
-router.put('/:id', updateElectricitySupply);
-router.delete('/:id', deleteElectricitySupply);
+router.post('/', auth_middleware(['user']), createElectricitySupply);
+router.get('/', auth_middleware(['admin']), getElectricitySupplies);
+router.get('/:id', auth_middleware(['admin']), getElectricitySupply);
+router.put('/:id', auth_middleware(['admin']), updateElectricitySupply);
+router.delete('/:id', auth_middleware(['admin']), deleteElectricitySupply);
 
 export default router;
 

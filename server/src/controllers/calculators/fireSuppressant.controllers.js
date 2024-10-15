@@ -7,7 +7,10 @@ export const createFireSuppressant = async (req, res) => {
     if (error) return res.status(400).json({ message: error.details[0].message });
 
     try {
-        const fireSuppressant = await FireSuppressantDataCollection.create(req.body);
+        const fireSuppressant = await FireSuppressantDataCollection.create({
+            ...req.body, // Spread operator to include all other fields
+            user: req.user_id // Assign user_id to the user field
+        });
         await fireSuppressant.save();
         res.status(201).json(fireSuppressant);
     } catch (err) {

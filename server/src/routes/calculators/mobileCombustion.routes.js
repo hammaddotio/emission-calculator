@@ -11,7 +11,7 @@ import { auth_middleware } from './../../middlewares/auth.middlewares.js';
 const router = express.Router();
 
 // Route to create a new mobile combustion record
-router.post('/', createMobileCombustion);
+router.post('/', auth_middleware(['user']), createMobileCombustion);
 
 // Route to get all mobile combustion records
 router.get('/', auth_middleware(['admin']), getAllMobileCombustions);

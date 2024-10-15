@@ -17,6 +17,11 @@ const stationaryCombustionSchema = new mongoose.Schema({
         totalKgCo2e: { type: Number, required: true },
         totalN2oEmissions: { type: Number, required: true },
     },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 }, { timestamps: true });
 
 export const StationaryCombustion = mongoose.model('StationaryCombustion', stationaryCombustionSchema);

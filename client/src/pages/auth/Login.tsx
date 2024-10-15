@@ -7,6 +7,7 @@ import { Button, Form, Input, message } from 'antd';
 import { RootState } from '../../redux/store'; // Adjust import based on your store file path
 import { useNavigate } from 'react-router-dom';
 import Auth from '../../layouts/Auth';
+import { headers } from '../../utils/api/apiHeaders';
 
 const Login: React.FC = () => {
     const dispatch = useDispatch();
@@ -16,11 +17,12 @@ const Login: React.FC = () => {
 
     const onFinish = async (values: { email: string; password: string }) => {
         try {
-            const resultAction = await dispatch(loginUser(values)); // Dispatch the login action
+            const resultAction = await dispatch(loginUser({ ...values })); // Dispatch the login action
 
             if (loginUser.fulfilled.match(resultAction)) {
                 message.success('Login successful!');
                 navigate('/calculators');
+                headers.headers.Authorization = localStorage.getItem('token')
             } else {
                 // If login failed, display the error returned from the API
                 message.error(error || 'Login failed. Please check your credentials.');

@@ -13,6 +13,11 @@ const fireSuppressantDataSchema = new mongoose.Schema({
 // Main schema for storing only fire suppressant data entries
 const fireSuppressantDataCollectionSchema = new mongoose.Schema({
     fireSuppressants: [fireSuppressantDataSchema], // Array of individual fire suppressant entries
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 // Export the FireSuppressantData model

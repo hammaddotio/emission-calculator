@@ -54,15 +54,8 @@ export const login = async (req, res) => {
 
         // Define validation schema using Joi
         const user_login_schema = Joi.object({
-            email: Joi.string().email().required().messages({
-                'any.required': 'Email is required',
-                'string.email': 'Must be a valid email address'
-            }),
-            password: Joi.string().min(6).max(20).required().messages({
-                'any.required': 'Password is required',
-                'string.min': 'Password must be at least 6 characters long',
-                'string.max': 'Password must not exceed 20 characters'
-            }),
+            email: Joi.string().required('email is required'),
+            password: Joi.string().min(6).max(20).required('Password is required')  // Adjust min and max as per your rules
         });
 
         // Validate the request body
@@ -77,20 +70,12 @@ export const login = async (req, res) => {
         const is_password_valid = await compare_password(password, find_user.password);
         if (!is_password_valid) return res.status(401).json({ error: 'Invalid credentials' });
 
-        // Set user session (assuming you have express-session middleware configured)
-        req.session.userId = find_user._id; // Store user ID in the session
+        // Generate JWT token for the user
+        const token = generate_jwt_token(find_user);
 
-        // Optionally, set a cookie for session ID (if you're using sessions)
-        res.cookie('sessionId', req.session.id, {
-            httpOnly: true, // Prevents client-side access to the cookie
-            secure: process.env.NODE_ENV === 'production', // Only set on HTTPS in production
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-            sameSite: 'Strict' // Adjust as needed (Strict, Lax, None)
-        });
-
-        // Return user data (excluding password)
-        const { password: _, ...user_data } = find_user._doc; // Exclude password from the response
-        res.status(200).json({ user: user_data }); // No token needed, session is handled via cookie
+        // Return user data (excluding password) and token
+        const { password: _, ...user_data } = find_user._doc;  // Exclude password from the response
+        res.status(200).json({ user: user_data, token });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An internal server error occurred' });

@@ -10,7 +10,10 @@ export const createStationaryCombustionData = async (req, res) => {
     }
 
     try {
-        const combustionData = new StationaryCombustion(req.body);
+        const combustionData = new StationaryCombustion({
+            ...req.body, // Spread operator to include all other fields
+            user: req.user_id // Assign user_id to the user field
+        });
         await combustionData.save();
         res.status(201).json({ status: true, data: combustionData });
     } catch (error) {

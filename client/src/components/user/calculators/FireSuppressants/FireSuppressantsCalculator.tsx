@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, InputNumber, Button, Select, message, Empty, Spin } from 'antd';
 import axios from 'axios';
 import { FIRE_SUPPRESSANT_API } from '../../../../utils/api/apis';
+import { headers } from '../../../../utils/api/apiHeaders';
 
 interface GasData {
     key: string;
@@ -84,7 +85,7 @@ const FireSuppressants: React.FC = () => {
         try {
             console.log({ data: filteredData, ...totals })
             setLoading(true);
-            const response = await axios.post(`${FIRE_SUPPRESSANT_API}`, { fireSuppressants: filteredData, ...totals });
+            const response = await axios.post(`${FIRE_SUPPRESSANT_API}`, { fireSuppressants: filteredData, ...totals }, headers);
             message.success('Data successfully sent to the server.');
             console.log('Data sent to API:', response.data);
         } catch (error) {

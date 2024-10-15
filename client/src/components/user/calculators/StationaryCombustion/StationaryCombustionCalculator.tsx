@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Table, Input, Button, message, Typography, Card } from 'antd';
 import axios from 'axios';
 import { STATIONARY_COMBUSTION_API } from '../../../../utils/api/apis';
+import { headers } from '../../../../utils/api/apiHeaders';
+import { FaCloud } from 'react-icons/fa'
 
 const { Title } = Typography;
 
@@ -118,7 +120,7 @@ const StationaryCombustion: React.FC = () => {
 
     const saveEmissionsData = async (payload: any) => {
         try {
-            const response = await axios.post(`${STATIONARY_COMBUSTION_API}`, payload);
+            const response = await axios.post(`${STATIONARY_COMBUSTION_API}`, payload, headers);
             if (response.data.status) {
                 message.success('Emissions data saved successfully');
             } else {
@@ -170,9 +172,9 @@ const StationaryCombustion: React.FC = () => {
     ];
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <Card className="max-w-4xl w-full p-6 shadow-lg">
-                <Title level={2} className="text-center">Stationary Combustion Calculator</Title>
+        <div className="flex justify-center items-center h-screen ">
+            <Card className="max-w-4xl w-full p-6 shadow-lg rounded-lg mt-60">
+                <Title level={2} className="text-center text-gray-800 mb-6">Stationary Combustion Calculator</Title>
 
                 <Table
                     dataSource={formData}
@@ -181,21 +183,54 @@ const StationaryCombustion: React.FC = () => {
                     rowKey="key"
                     style={{ width: '100%', marginBottom: '16px' }}
                     bordered
+                    summary={() => (
+                        <Table.Summary fixed>
+                            <Table.Summary.Row>
+                                <Table.Summary.Cell index={0} colSpan={3}>
+                                    <strong>Total Emissions</strong>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                    <strong>{totalEmissions.co2.toFixed(6)} tonnes CO₂</strong>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                    <strong>{totalEmissions.ch4.toFixed(6)} tonnes CH₄</strong>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                    <strong>{totalEmissions.n2o.toFixed(6)} tonnes N₂O</strong>
+                                </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                        </Table.Summary>
+                    )}
                 />
 
-                <div className="mt-4 p-4 bg-white shadow rounded">
-                    <Title level={4} className="mb-2">Total Emissions Summary</Title>
-                    <p className="font-semibold text-gray-700">Total CO2 Emissions: <span className="text-blue-600">{totalEmissions.co2.toFixed(6)} tonnes</span></p>
-                    <p className="font-semibold text-gray-700">Total CH4 Emissions: <span className="text-blue-600">{totalEmissions.ch4.toFixed(6)} tonnes</span></p>
-                    <p className="font-semibold text-gray-700">Total N2O Emissions: <span className="text-blue-600">{totalEmissions.n2o.toFixed(6)} tonnes</span></p>
-                    <p className="font-semibold text-gray-700">Total kg CO2e: <span className="text-blue-600">{totalEmissions.kgCo2e.toFixed(6)} kg</span></p>
+                <div className="mt-8 p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold text-gray-800">Total Emissions Summary</h2>
+                        <div className="bg-blue-100 text-blue-600 rounded-full p-2 shadow-sm">
+                            <FaCloud className="text-2xl" /> {/* Emission icon */}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                        {[
+                            { label: 'Total CO₂ Emissions', value: totalEmissions.co2.toFixed(6) },
+                            { label: 'Total CH₄ Emissions', value: totalEmissions.ch4.toFixed(6) },
+                            { label: 'Total N₂O Emissions', value: totalEmissions.n2o.toFixed(6) },
+                            { label: 'Total kg CO₂e', value: totalEmissions.kgCo2e.toFixed(6) },
+                        ].map((item, index) => (
+                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
+                                <span className="text-sm font-medium text-gray-600">{item.label}</span>
+                                <span className="text-blue-600 font-semibold">{item.value} tonnes</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <Button type="primary" onClick={calculateEmissions} className="mt-4 w-full" size="large">
-                    Calculate & Submit
+                    Submit
                 </Button>
 
-                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                {error && <p className="text-red-500 text-center mt-2">{error}</p>}
             </Card>
         </div>
     );

@@ -14,6 +14,11 @@ const purchasedGasDataSchema = new mongoose.Schema({
 const purchasedGasCollectionSchema = new mongoose.Schema({
     PurchasedGas: [purchasedGasDataSchema], // Array of purchased gas data entries
     totalEmissions: { type: Number, required: true }, // Total emissions calculated from the array
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 // Create and export the models

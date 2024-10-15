@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Table, InputNumber, Button, message } from 'antd';
 import axios from 'axios';
 import { PURCHASED_GAS_API } from '../../../../utils/api/apis';
+import { headers } from '../../../../utils/api/apiHeaders';
 
 interface EmissionData {
     key: string;
@@ -105,7 +106,7 @@ const EmissionsTable: React.FC = () => {
             const response = await axios.post(`${PURCHASED_GAS_API}`, {
                 totalEmissions,
                 PurchasedGas: rowData,
-            });
+            }, headers);
 
             // Handle response from the server
             message.success(`${response.data.message}`);
@@ -145,7 +146,7 @@ const EmissionsTable: React.FC = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4 text-center">Scope 1 - Direct Emissions Calculation</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">Purchased Gas</h2>
             <Button type="primary" onClick={addNewRow} className="mb-4">Add New Row</Button>
             <Table
                 dataSource={data}

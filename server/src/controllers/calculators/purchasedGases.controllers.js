@@ -14,7 +14,10 @@ export const createPurchasedGasCollection = async (req, res) => {
             });
         }
 
-        const newCollection = await PurchasedGasCollection.create(value);
+        const newCollection = await PurchasedGasCollection.create({
+            ...req.body, // Spread operator to include all other fields
+            user: req.user_id // Assign user_id to the user field
+        });
         return res.status(201).json({
             message: 'Purchased gas collection created successfully',
             status: true,

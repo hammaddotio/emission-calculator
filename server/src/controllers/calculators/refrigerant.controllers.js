@@ -15,7 +15,10 @@ export const createRefrigerantData = async (req, res) => {
     }
 
     try {
-        const refrigerantData = new Refrigerant(req.body);
+        const refrigerantData = new Refrigerant({
+            ...req.body, // Spread operator to include all other fields
+            user: req.user_id // Assign user_id to the user field
+        });
         await refrigerantData.save();
         res.status(201).json({ status: true, message: 'Refrigerant data saved successfully', error: null });
     } catch (error) {

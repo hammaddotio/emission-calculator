@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Table, InputNumber, Button, Select, message } from 'antd';
 import axios from 'axios';
 import { REFRIGERANT_API } from '../../../../utils/api/apis';
+import { headers } from '../../../../utils/api/apiHeaders';
 
 // Define the data type for refrigerant records
 interface RefrigerantRecord {
@@ -102,7 +103,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
                 refrigerants,
                 totalEmissions,
             };
-            const response = await axios.post(`${REFRIGERANT_API}`, payload);
+            const response = await axios.post(`${REFRIGERANT_API}`, payload, headers);
             message.success(response.data.message);
         } catch (error) {
             message.error('API call failed: ' + (error as Error).message);

@@ -7,7 +7,10 @@ export const createElectricitySupply = async (req, res) => {
         const { error } = electricitySupplySchema.validate(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message });
 
-        const electricitySupply = new ElectricitySupply(req.body);
+        const electricitySupply = new ElectricitySupply({
+            ...req.body, // Spread operator to include all other fields
+            user: req.user_id // Assign user_id to the user field
+        });
         await electricitySupply.save();
         res.status(201).json(electricitySupply);
     } catch (err) {

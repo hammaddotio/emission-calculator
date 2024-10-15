@@ -22,7 +22,7 @@ interface AuthState {
 // Define the initial state
 const initialState: AuthState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: localStorage.getItem('token') ? true : false,
   loading: false,
   error: null,
 };

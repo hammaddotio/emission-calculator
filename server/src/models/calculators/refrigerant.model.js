@@ -14,6 +14,13 @@ const refrigerantDataSchema = new mongoose.Schema({
 const refrigerantSchema = new mongoose.Schema({
     refrigerants: [refrigerantDataSchema],
     totalEmissions: { type: Number, required: true },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+}, {
+    timestamps: true
 });
 
 export const Refrigerant = mongoose.model('Refrigerant', refrigerantSchema);

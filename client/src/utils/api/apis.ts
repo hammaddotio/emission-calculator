@@ -1,4 +1,5 @@
-export const SERVER_URL: string = 'http://127.0.0.1:3000'
+// export const SERVER_URL: string = 'http://127.0.0.1:3000'
+export const SERVER_URL: string = 'http://192.168.1.9:3000'
 
 // -------------------------------------------------CALCULATORS------------------------------------------------- 
 // MOBILE_COMBUSTION_API
@@ -25,3 +26,19 @@ export const LOGIN_API: string = `${SERVER_URL}/api/v1/auth/login`
 
 // REGISTER_API
 export const REGISTER_API: string = `${SERVER_URL}/api/v1/auth/register`
+
+
+
+
+// -------------------------------------------------USER-------------------------------------------------
+// USER_API
+export const USER_API: string = `${SERVER_URL}/api/v1/user` 
+
+
+
+// -------------------------------------------------ALL-CALCULATORS-------------------------------------------------
+// ALL_CALCULATORS
+export const CALCULATORS_LIST_API: string = `${SERVER_URL}/api/v1/calculators`
+
+// CALCULATORS_COUNT_FOR_CHART_APIX
+export const CALCULATORS_COUNT_FOR_CHART_API:string = `${SERVER_URL}/api/v1/calculators/count` 
