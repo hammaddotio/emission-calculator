@@ -1,4 +1,4 @@
-import { StationaryCombustion } from '../../models/calculators/stationaryCombustion.model.js';
+import StationaryCombustion from '../../models/calculators/stationaryCombustion.model.js';
 import { validateStationaryCombustion } from '../../validators/StationaryCombustionValidator.js';
 
 // Create

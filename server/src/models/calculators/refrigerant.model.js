@@ -23,4 +23,5 @@ const refrigerantSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const Refrigerant = mongoose.model('Refrigerant', refrigerantSchema);
+const Refrigerant = mongoose.model('Refrigerant', refrigerantSchema);
+export default Refrigerant  

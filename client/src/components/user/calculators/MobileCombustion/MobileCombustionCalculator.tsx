@@ -100,7 +100,7 @@ const FuelEmissionCalculator: React.FC = () => {
             // Prepare the payload with fuel records and totals
             const payload = {
                 fuelRecords, // Array of fuel records
-                totals,      // Emission totals
+                ...totals,      // Emission totals
             };
             console.log(payload)
 

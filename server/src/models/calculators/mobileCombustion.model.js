@@ -43,12 +43,10 @@ const fuelRecordSchema = new mongoose.Schema({
 // Define the Mobile Combustion Schema (Parent Schema)
 const mobileCombustionSchema = new mongoose.Schema({
     fuelRecords: [fuelRecordSchema], // Array of fuel records
-    totals: {
-        co2Emissions: { type: Number, required: true },
-        ch4Emissions: { type: Number, required: true },
-        n2oEmissions: { type: Number, required: true },
-        totalEmissions: { type: Number, required: true }
-    },
+    co2Emissions: { type: Number, required: true },
+    ch4Emissions: { type: Number, required: true },
+    n2oEmissions: { type: Number, required: true },
+    totalEmissions: { type: Number, required: true },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

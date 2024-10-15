@@ -107,12 +107,10 @@ const StationaryCombustion: React.FC = () => {
 
         const payload = {
             emissions: formData,
-            totalEmissions: {
-                totalCo2Emissions: totalEmissions.co2,
-                totalCh4Emissions: totalEmissions.ch4,
-                totalN2oEmissions: totalEmissions.n2o,
-                totalKgCo2e: totalEmissions.kgCo2e,
-            },
+            totalCo2Emissions: totalEmissions.co2,
+            totalCh4Emissions: totalEmissions.ch4,
+            totalN2oEmissions: totalEmissions.n2o,
+            totalKgCo2e: totalEmissions.kgCo2e,
         };
 
         await saveEmissionsData(payload);

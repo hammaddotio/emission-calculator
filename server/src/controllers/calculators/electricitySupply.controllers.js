@@ -1,4 +1,4 @@
-import { ElectricitySupply } from '../../models/calculators/electricitySupply.model.js';
+import ElectricitySupply from '../../models/calculators/electricitySupply.model.js';
 import { electricitySupplySchema } from '../../validators/electricitySupplyValidator.js';
 
 // Create a new entry

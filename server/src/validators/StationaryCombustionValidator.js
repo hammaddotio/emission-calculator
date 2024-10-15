@@ -29,28 +29,23 @@ const emissionSchema = Joi.object({
     }),
 });
 
-const totalEmissionsSchema = Joi.object({
-    totalCh4Emissions: Joi.number().allow(null).messages({
-        'number.base': 'Total CH4 emissions must be a number',
-    }),
-    totalCo2Emissions: Joi.number().allow(null).messages({
-        'number.base': 'Total CO2 emissions must be a number',
-    }),
-    totalKgCo2e: Joi.number().allow(null).messages({
-        'number.base': 'Total kg CO2e must be a number',
-    }),
-    totalN2oEmissions: Joi.number().allow(null).messages({
-        'number.base': 'Total N2O emissions must be a number',
-    }),
-});
 
 const stationaryCombustionSchema = Joi.object({
     emissions: Joi.array().items(emissionSchema).required().messages({
         'array.base': 'Emissions must be an array',
         'any.required': 'Emissions are required',
     }),
-    totalEmissions: totalEmissionsSchema.required().messages({
-        'any.required': 'Total emissions are required',
+    totalCh4Emissions: Joi.number().allow(null).messages({
+        'number.base': 'Total CH4 emissions must be a number',
+    }),
+    totalCo2Emissions: Joi.number().allow(null).messages({
+        'number.base': 'Total CO2 emissions must be a number',
+    }),
+    totalN2oEmissions: Joi.number().allow(null).messages({
+        'number.base': 'Total N2O emissions must be a number',
+    }),
+    totalKgCo2e: Joi.number().allow(null).messages({
+        'number.base': 'Total kg CO2e must be a number',
     }),
 });
 

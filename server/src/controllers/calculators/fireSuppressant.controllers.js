@@ -1,4 +1,4 @@
-import { FireSuppressantDataCollection } from '../../models/calculators/fireSuppressant.model.js';
+import FireSuppressantDataCollection from '../../models/calculators/fireSuppressant.model.js';
 import { fireSuppressantSchema } from '../../validators/fireSuppressantValidator.js';
 
 // Create a new fire suppressant entry

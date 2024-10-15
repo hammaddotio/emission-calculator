@@ -17,11 +17,11 @@ const Login: React.FC = () => {
 
     const onFinish = async (values: { email: string; password: string }) => {
         try {
-            const resultAction = await dispatch(loginUser({ ...values })); // Dispatch the login action
+            const resultAction: any = await dispatch(loginUser({ ...values })); // Dispatch the login action
 
             if (loginUser.fulfilled.match(resultAction)) {
                 message.success('Login successful!');
-                navigate('/calculators');
+                resultAction.payload.user_role === 'admin' ? navigate('/dashboard') : navigate('/calculators');
                 headers.headers.Authorization = localStorage.getItem('token')
             } else {
                 // If login failed, display the error returned from the API

@@ -23,4 +23,4 @@ const electricitySupplySchema = new mongoose.Schema({
 
 const ElectricitySupply = mongoose.model('ElectricitySupply', electricitySupplySchema);
 
-export { ElectricitySupply };
+export default ElectricitySupply;

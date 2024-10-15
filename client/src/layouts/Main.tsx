@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import Navbar from '../common/Navbar';
 
 interface MainProps {
     children?: ReactNode; // Type for children prop
@@ -7,7 +8,9 @@ interface MainProps {
 const Main: React.FC<MainProps> = ({ children }) => {
     return (
         <>
+            {/* <Navbar /> */}
             {children}
+
         </>
     );
 };

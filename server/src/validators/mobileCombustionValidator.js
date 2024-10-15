@@ -79,26 +79,24 @@ const fuelRecordSchema = Joi.object({
 // Define the Joi schema for the overall mobile combustion
 export const mobileCombustionSchema = Joi.object({
     fuelRecords: Joi.array().items(fuelRecordSchema).min(1).required(),
-    totals: Joi.object({
-        co2Emissions: Joi.number().min(0).required().messages({
-            'any.required': 'Total CO2 is required',
-            'number.base': 'Total CO2 must be a number',
-            'number.min': 'Total CO2 must be a positive number'
-        }),
-        ch4Emissions: Joi.number().min(0).required().messages({
-            'any.required': 'Total CH4 is required',
-            'number.base': 'Total CH4 must be a number',
-            'number.min': 'Total CH4 must be a positive number'
-        }),
-        n2oEmissions: Joi.number().min(0).required().messages({
-            'any.required': 'Total N2O is required',
-            'number.base': 'Total N2O must be a number',
-            'number.min': 'Total N2O must be a positive number'
-        }),
-        totalEmissions: Joi.number().min(0).required().messages({
-            'any.required': 'Total emissions are required',
-            'number.base': 'Total emissions must be a number',
-            'number.min': 'Total emissions must be a positive number'
-        })
-    }).required()
+    co2Emissions: Joi.number().min(0).required().messages({
+        'any.required': 'Total CO2 is required',
+        'number.base': 'Total CO2 must be a number',
+        'number.min': 'Total CO2 must be a positive number'
+    }),
+    ch4Emissions: Joi.number().min(0).required().messages({
+        'any.required': 'Total CH4 is required',
+        'number.base': 'Total CH4 must be a number',
+        'number.min': 'Total CH4 must be a positive number'
+    }),
+    n2oEmissions: Joi.number().min(0).required().messages({
+        'any.required': 'Total N2O is required',
+        'number.base': 'Total N2O must be a number',
+        'number.min': 'Total N2O must be a positive number'
+    }),
+    totalEmissions: Joi.number().min(0).required().messages({
+        'any.required': 'Total emissions are required',
+        'number.base': 'Total emissions must be a number',
+        'number.min': 'Total emissions must be a positive number'
+    })
 });

@@ -22,5 +22,6 @@ const purchasedGasCollectionSchema = new mongoose.Schema({
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 // Create and export the models
-export const PurchasedGasCollection = mongoose.model('PurchasedGasCollection', purchasedGasCollectionSchema);
+const PurchasedGasCollection = mongoose.model('PurchasedGasCollection', purchasedGasCollectionSchema);
+export default PurchasedGasCollection
 

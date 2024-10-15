@@ -1,9 +1,9 @@
-import { ElectricitySupply } from '../models/calculators/electricitySupply.model.js';
-import { FireSuppressantDataCollection } from '../models/calculators/fireSuppressant.model.js';
+import ElectricitySupply from '../models/calculators/electricitySupply.model.js';
+import FireSuppressantDataCollection from '../models/calculators/fireSuppressant.model.js';
 import MobileCombustion from '../models/calculators/mobileCombustion.model.js';
-import { PurchasedGasCollection } from '../models/calculators/purchasedGases.model.js';
-import { Refrigerant } from '../models/calculators/refrigerant.model.js';
-import { StationaryCombustion } from '../models/calculators/stationaryCombustion.model.js';
+import PurchasedGasCollection from '../models/calculators/purchasedGases.model.js';
+import Refrigerant from '../models/calculators/refrigerant.model.js';
+import StationaryCombustion from '../models/calculators/stationaryCombustion.model.js';
 
 export const countCalculators = async () => {
     const electricityCount = await ElectricitySupply.countDocuments();

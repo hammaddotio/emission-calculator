@@ -1,5 +1,5 @@
 // controllers/refrigerantController.js
-import { Refrigerant } from '../../models/calculators/refrigerant.model.js';
+import Refrigerant from '../../models/calculators/refrigerant.model.js';
 import { validateRefrigerantData } from '../../validators/RefrigerantValidator.js'
 
 // Create new refrigerant data

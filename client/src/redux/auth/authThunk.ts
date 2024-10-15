@@ -19,6 +19,7 @@ export const loginUser = createAsyncThunk<
         // { withCredentials: true },
         
       );
+      
       localStorage.setItem('token', response.data.token); // Store token in local storage
       return response.data.user; // Return user data
     } catch (error) {

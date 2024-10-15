@@ -1,5 +1,5 @@
 import { purchasedGasCollectionValidationSchema } from '../../validators/purchasedGasesValidator.js';
-import { PurchasedGasCollection } from '../../models/calculators/purchasedGases.model.js';
+import PurchasedGasCollection from '../../models/calculators/purchasedGases.model.js';
 
 // Create a new PurchasedGasCollection
 export const createPurchasedGasCollection = async (req, res) => {
