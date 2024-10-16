@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
 
 
                         <div className="flex justify-between items-center p-4 bg-white shadow">
-                            <h1 className="text-xl font-bold">Your Logo</h1>
+                            <h1 className="text-xl font-bold">Logo</h1>
 
                             <Menu mode={'horizontal'} className="hidden md:flex">
                                 <Menu.Item key="logout">
