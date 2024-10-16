@@ -1,8 +1,8 @@
 import { Pie } from "@ant-design/charts";
 import React from "react";
 import { Select } from "antd";
-import Loading from "../../common/extra/Loading";
-import Error from "../../common/extra/Error";
+import Loading from "../../../common/extra/Loading";
+import Error from "../../../common/extra/Error";
 
 // Define types for props
 interface PieChartData {
@@ -18,10 +18,11 @@ interface User {
 interface PieChartProps {
   pieChartData: PieChartData[];
   users: User[];
+  selectedUser: User;
   setSelectedUser: (value: string | null) => void;
 }
 
-const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUser }) => {
+const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUser, selectedUser }) => {
   const config = {
     appendPadding: 10,
     data: pieChartData,
@@ -58,16 +59,18 @@ const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUse
 
 
   return (
-    <div className="mx-[64px] my-[32px]">
+    <div className="mx-[64px] my-[32px] w-1/3">
       {/* User selection dropdown */}
       <Select
+        className=""
         placeholder="Select a user"
         style={{ width: 200, marginBottom: "20px" }}
         onChange={setSelectedUser}
+        value={selectedUser}
         allowClear
       >
         <Select.Option value={null}>All Users</Select.Option>
-        {users.map((user) => (
+        {users?.map((user) => (
           <Select.Option key={user._id} value={user._id}>
             {user.username}
           </Select.Option>

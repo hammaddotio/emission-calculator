@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const monthDataSchema = new mongoose.Schema({
-    description: { type: String, required: true },
+    description: { type: String },
     electricityPurchased: { type: Number, required: true },
     emissionFactor: { type: Number, default: 0.7 },
     powerCompanySpecific: { type: Number, default: 0 },

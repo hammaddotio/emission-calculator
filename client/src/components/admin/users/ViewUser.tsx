@@ -25,8 +25,8 @@ const ViewUser: React.FC = ({ user }) => {
     return (
         <>
             {/* View button with an icon */}
-            <Button icon={<EyeOutlined />} onClick={showModal}>
-            </Button>
+            <Button icon={<EyeOutlined />} onClick={showModal} />
+
 
             {/* Modal to view user details */}
             <Modal
@@ -51,6 +51,9 @@ const ViewUser: React.FC = ({ user }) => {
                         <Descriptions bordered size="middle" column={1}>
                             <Descriptions.Item label={<><MailOutlined /> Email</>}>
                                 {user.email}
+                            </Descriptions.Item>
+                            <Descriptions.Item label={<><UserOutlined /> User Role</>}>
+                                {user.user_role}
                             </Descriptions.Item>
                             <Descriptions.Item label={<><CalendarOutlined /> Created At</>}>
                                 {new Date(user.createdAt).toLocaleDateString()}

@@ -1,69 +1,101 @@
-import { User } from "../../models/user.models.js"
-import { encrypt_password } from "../../utils/bcrypt.js"
+import { User } from "../../models/user.models.js";
+import { encrypt_password } from "../../utils/bcrypt.js";
+import { validateUser } from "../../validators/userValidator.js";
+
+// Consistent response format helper
+const sendResponse = (res, status, message, data = null, error = null) => {
+    return res.status(status).json({
+        status: status === 200 || status === 201,
+        message,
+        data,
+        error,
+    });
+};
+
+
+export const create_user = async (req, res) => {
+    try {
+        const { error } = validateUser(req.body);
+        if (error) {
+            return sendResponse(res, 400, "Validation error", null, error.details[0].message);
+        }
+
+        const { username, email, password, user_role } = req.body;
+        const encryptedPassword = await encrypt_password(password);
+
+        const newUser = new User({
+            username,
+            email,
+            user_role,
+            password: encryptedPassword,
+        });
+
+        const savedUser = await newUser.save();
+        return sendResponse(res, 201, "User created successfully", savedUser);
+    } catch (error) {
+        return sendResponse(res, 500, "Failed to create user", null, error.message);
+    }
+};
 
 export const get_all_users = async (req, res) => {
     try {
-        const users = await User.find()
-        res.status(200).json({ users })
+        const users = await User.find();
+        return sendResponse(res, 200, "Users retrieved successfully", users);
     } catch (error) {
-        res.status(400).json({ error: error })
+        return sendResponse(res, 500, "Failed to retrieve users", null, error.message);
     }
-}
+};
 
 export const get_user = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return sendResponse(res, 404, "User not found");
         }
-
-        res.status(200).json({ user });
+        return sendResponse(res, 200, "User retrieved successfully", user);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return sendResponse(res, 500, "Failed to retrieve user", null, error.message);
     }
 };
 
 export const update_user = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { error } = validateUser(req.body);
+        if (error) {
+            return sendResponse(res, 400, "Validation error", null, error.details[0].message);
+        }
 
+        const { username, email, password, user_role } = req.body;
+        const user = await User.findById(req.params.id);
 
-        const find_user = await User.findById(req.params.id);
-        if (!find_user) return res.status(400).json({ message: 'user not found' })
+        if (!user) {
+            return sendResponse(res, 404, "User not found");
+        }
 
-        // const decrypt_password = compare_password(password, find_user.password)
-        // console.log(decrypt_password)
-
-        const updated_data = {
+        const updatedData = {
             username,
             email,
+            user_role,
             password: await encrypt_password(password),
         };
 
-        const user = await User.findByIdAndUpdate(
-            req.params.id,
-            updated_data,
-            { new: true }
-        );
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        res.status(200).json({ user });
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+        return sendResponse(res, 200, "User updated successfully", updatedUser);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return sendResponse(res, 500, "Failed to update user", null, error.message);
     }
 };
 
 export const delete_user = async (req, res) => {
     try {
-        const { id } = req.params
-
-        const user = await User.findByIdAndDelete(id)
-        res.status(200).json({ user })
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (!user) {
+            return sendResponse(res, 404, "User not found");
+        }
+        return sendResponse(res, 200, "User deleted successfully", user);
     } catch (error) {
-        res.status(400).json({ error: error })
+        return sendResponse(res, 500, "Failed to delete user", null, error.message);
     }
-}
+};
+
+

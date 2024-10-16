@@ -14,19 +14,17 @@ interface MonthData {
 
 const ElectricitySupplyCalculator: React.FC = () => {
     const defaultEmissionFactor = 0.7;
-    const months = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    const currentMonthIndex = new Date().getMonth(); // Get the current month index (0 = January, 11 = December)
+    const currentMonthName = new Date().toLocaleString('default', { month: 'long' }); // Get current month name
 
     const [companyName, setCompanyName] = useState<string>('');
-    const [facilityData, setFacilityData] = useState<MonthData[]>(Array(12).fill({
+    const [monthData, setMonthData] = useState<MonthData>({
         description: '',
         electricityPurchased: 0,
         emissionFactor: defaultEmissionFactor,
         powerCompanySpecific: 0,
         emissions: 0
-    }));
+    });
     const [totalEmissions, setTotalEmissions] = useState<number>(0);
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -36,37 +34,33 @@ const ElectricitySupplyCalculator: React.FC = () => {
         setCompanyName(e.target.value);
     };
 
-    // Handle input changes and update facility data accordingly
-    const handleInputChange = (value: any, field: string, index: number) => {
-        const updatedFacilityData = [...facilityData];
-        updatedFacilityData[index] = {
-            ...updatedFacilityData[index],
+    // Handle input changes and update data accordingly
+    const handleInputChange = (value: any, field: string) => {
+        const updatedMonthData = {
+            ...monthData,
             [field]: value,
         };
         // Calculate emissions for the updated row
-        updatedFacilityData[index].emissions = (updatedFacilityData[index].electricityPurchased * updatedFacilityData[index].emissionFactor) / 1000;
+        updatedMonthData.emissions = (updatedMonthData.electricityPurchased * updatedMonthData.emissionFactor) / 1000;
 
-        setFacilityData(updatedFacilityData);
+        setMonthData(updatedMonthData);
     };
 
-    // useEffect to recalculate total emissions whenever facilityData changes
+    // useEffect to recalculate total emissions whenever monthData changes
     useEffect(() => {
-        calculateTotalEmissions(facilityData);
-        checkIfButtonShouldBeEnabled(facilityData);
-    }, [facilityData]);
+        calculateTotalEmissions(monthData);
+        checkIfButtonShouldBeEnabled(monthData);
+    }, [monthData]);
 
     // Calculate total emissions
-    const calculateTotalEmissions = (data: MonthData[]) => {
-        const total = data.reduce((sum, month) => sum + month.emissions, 0);
-        setTotalEmissions(total);
+    const calculateTotalEmissions = (data: MonthData) => {
+        setTotalEmissions(data.emissions);
     };
 
     // Check if the button should be enabled (if any row is filled)
-    const checkIfButtonShouldBeEnabled = (data: MonthData[]) => {
-        const isAnyRowFilled = data.some(
-            row => row.description || row.electricityPurchased || row.powerCompanySpecific
-        );
-        setIsButtonEnabled(isAnyRowFilled);
+    const checkIfButtonShouldBeEnabled = (data: MonthData) => {
+        const isRowFilled: any = data.description && data.electricityPurchased && data.powerCompanySpecific && companyName;
+        setIsButtonEnabled(isRowFilled);
     };
 
     // Handle form submission and API call
@@ -75,12 +69,12 @@ const ElectricitySupplyCalculator: React.FC = () => {
         try {
             const payload = {
                 companyName,
-                facilityData,
+                facilityData: [monthData], // Send monthData as an array of objects
                 totalEmissions // Send total emissions in the API payload
             };
+
             // API call using Axios
             await axios.post(`${ELECTRICITY_SUPPLY_API}`, payload, headers);
-
             message.success('Data submitted successfully!');
         } catch (error) {
             message.error('Failed to submit data. Please try again.');
@@ -95,17 +89,18 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Billing Month',
             dataIndex: 'month',
             key: 'month',
+            render: () => currentMonthName,
         },
         {
             title: 'Electricity Purchased (kWh)',
             dataIndex: 'electricityPurchased',
             key: 'electricityPurchased',
-            render: (text: any, record: MonthData, index: number) => (
+            render: (text: any) => (
                 <InputNumber
                     placeholder="Enter kWh"
-                    value={record.electricityPurchased}
+                    value={monthData.electricityPurchased}
                     min={0}
-                    onChange={(value) => handleInputChange(value || 0, 'electricityPurchased', index)}
+                    onChange={(value) => handleInputChange(value || 0, 'electricityPurchased')}
                 />
             )
         },
@@ -113,12 +108,12 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Emission Factor (kg CO₂e/kWh)',
             dataIndex: 'emissionFactor',
             key: 'emissionFactor',
-            render: (text: any, record: MonthData, index: number) => (
+            render: (text: any) => (
                 <InputNumber
                     placeholder="Emission Factor"
-                    value={record.emissionFactor}
+                    value={monthData.emissionFactor}
                     min={0}
-                    onChange={(value) => handleInputChange(value || 0, 'emissionFactor', index)}
+                    onChange={(value) => handleInputChange(value || 0, 'emissionFactor')}
                 />
             )
         },
@@ -126,12 +121,12 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Power Company Specific',
             dataIndex: 'powerCompanySpecific',
             key: 'powerCompanySpecific',
-            render: (text: any, record: MonthData, index: number) => (
+            render: (text: any) => (
                 <InputNumber
                     placeholder="Power Company Specific"
-                    value={record.powerCompanySpecific}
+                    value={monthData.powerCompanySpecific}
                     min={0}
-                    onChange={(value) => handleInputChange(value || 0, 'powerCompanySpecific', index)}
+                    onChange={(value) => handleInputChange(value || 0, 'powerCompanySpecific')}
                 />
             )
         },
@@ -139,11 +134,11 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Facility / Source Description',
             dataIndex: 'description',
             key: 'description',
-            render: (text: string, record: MonthData, index: number) => (
+            render: (text: string) => (
                 <Input
                     placeholder="Enter description"
-                    value={record.description}
-                    onChange={(e) => handleInputChange(e.target.value, 'description', index)}
+                    value={monthData.description}
+                    onChange={(e) => handleInputChange(e.target.value, 'description')}
                 />
             )
         },
@@ -151,16 +146,18 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Indirect GHG Emissions (tonnes CO₂e)',
             dataIndex: 'emissions',
             key: 'emissions',
-            render: (text: number) => text.toFixed(2)
+            render: (text: number) => monthData.emissions.toFixed(2)
         }
     ];
 
-    // Prepare data for the table
-    const dataSource = facilityData.map((month, index) => ({
-        key: index,
-        month: months[index],
-        ...month,
-    }));
+    // Prepare data for the table (only current month's data)
+    const dataSource = [
+        {
+            key: currentMonthIndex,
+            month: currentMonthName,
+            ...monthData,
+        }
+    ];
 
     return (
         <div className="container mx-auto p-4">
@@ -178,7 +175,6 @@ const ElectricitySupplyCalculator: React.FC = () => {
                 dataSource={dataSource}
                 columns={columns}
                 pagination={false}
-            // bordered
             />
 
             <div className="mt-4 text-xl font-semibold text-center">

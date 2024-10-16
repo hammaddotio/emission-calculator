@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react';
 import Navbar from '../common/Navbar';
 
-interface MainProps {
+interface UserProps {
     children?: ReactNode; // Type for children prop
 }
 
-const Main: React.FC<MainProps> = ({ children }) => {
+const User: React.FC<UserProps> = ({ children }) => {
     return (
         <>
             <Navbar />
@@ -15,4 +15,4 @@ const Main: React.FC<MainProps> = ({ children }) => {
     );
 };
 
-export default Main;
+export default User;

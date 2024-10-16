@@ -1,23 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Form, Modal, message } from 'antd';
-import axios from 'axios';
+import { Button, Input, Form, Modal, message, Select } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { USER_API } from '../../../utils/api/apis';
+import { headers } from '../../../utils/api/apiHeaders';
 
 interface User {
     _id: string;
     username: string;
     email: string;
     createdAt: string;
+    user_role: 'admin' | 'user'; // Added user_role
 }
 
-const EditUser: React.FC<{ user: User }> = ({ user, fetchUsers }) => {
-    const [formData, setFormData] = useState<User>(user);
+const { Option } = Select;
+
+const EditUser: React.FC<{ user: User; fetchUsers: () => void }> = ({ user, fetchUsers }) => {
+    const [formData, setFormData] = useState<Omit<User, 'createdAt'> & { password?: string }>({
+        username: user.username,
+        email: user.email,
+        user_role: user.user_role,
+        password: '', // Initialize password as an empty string
+    });
     const [visible, setVisible] = useState(false); // State to control modal visibility
 
     useEffect(() => {
         // Set the initial form data when user prop changes
-        setFormData(user);
+        setFormData({
+            username: user.username,
+            email: user.email,
+            user_role: user.user_role,
+            password: '', // Reset password when user changes
+        });
     }, [user]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,12 +39,35 @@ const EditUser: React.FC<{ user: User }> = ({ user, fetchUsers }) => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const handleRoleChange = (value: string) => {
+        setFormData({ ...formData, user_role: value as 'admin' | 'user' });
+    };
+
+    const hasChanges = () => {
+        // Check if formData is different from original user data (username, email, user_role)
+        return (
+            formData.username !== user.username ||
+            formData.email !== user.email ||
+            formData.user_role !== user.user_role ||
+            !!formData.password // Check if password is provided (non-empty)
+        );
+    };
+
     const handleUpdate = async () => {
         try {
-            const response = await axios.patch(`${USER_API}/${user._id}`, formData);
+            // Create an object containing only the fields to be updated
+            const updateData = {
+                username: formData.username,
+                email: formData.email,
+                user_role: formData.user_role,
+                ...(formData.password && { password: formData.password }), // Include password if it is provided
+            };
+            console.log(updateData)
+
+            const response = await axios.patch(`${USER_API}/${user._id}`, updateData, headers);
             message.success('User updated successfully!'); // Display success message
             console.log(response.data); // Log the response
-            fetchUsers()
+            fetchUsers(); // Refresh users list
             setVisible(false); // Close the modal after successful update
         } catch (error) {
             message.error('Failed to update user.'); // Display error message
@@ -43,8 +80,7 @@ const EditUser: React.FC<{ user: User }> = ({ user, fetchUsers }) => {
             <Button
                 onClick={() => setVisible(true)} // Show modal on button click
                 icon={<EditOutlined />}
-            >
-            </Button>
+            />
 
             <Modal
                 title="Edit User"
@@ -59,6 +95,7 @@ const EditUser: React.FC<{ user: User }> = ({ user, fetchUsers }) => {
                         type="primary"
                         onClick={handleUpdate}
                         icon={<EditOutlined />}
+                        disabled={!hasChanges()} // Disable button if there are no changes
                     >
                         Update
                     </Button>
@@ -82,8 +119,27 @@ const EditUser: React.FC<{ user: User }> = ({ user, fetchUsers }) => {
                     <Form.Item label="Created At">
                         <Input
                             name="createdAt"
-                            value={new Date(formData.createdAt).toLocaleDateString()} // Display date as string
+                            value={new Date(user.createdAt).toLocaleDateString()} // Display date as string
                             disabled // Disable input for createdAt as it's not editable
+                        />
+                    </Form.Item>
+                    <Form.Item label="User Role">
+                        <Select
+                            value={formData.user_role}
+                            onChange={handleRoleChange}
+                            allowClear
+                        >
+                            <Option value="admin">Admin</Option>
+                            <Option value="user">User</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Password">
+                        <Input
+                            name="password"
+                            type="password" // Ensure password input is hidden
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Leave empty to keep current password"
                         />
                     </Form.Item>
                 </Form>

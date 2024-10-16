@@ -32,14 +32,21 @@ const Navbar: React.FC = () => {
 
                         <div className="flex justify-between items-center p-4 bg-white shadow">
                             <h1 className="text-xl font-bold">Your Logo</h1>
-                            <Button
+
+                            <Menu mode={'horizontal'} className="hidden md:flex">
+                                <Menu.Item key="logout">
+                                    <Link onClick={handleLogOut} to={'/'}>Logout</Link>
+                                </Menu.Item>
+                            </Menu>
+
+                            {/* <Button
                                 type="primary"
                                 onClick={showDrawer}
                                 className="md:hidden" // Hide the button on larger screens
                             >
                                 Menu
                             </Button>
-                            <Menu mode={'horizontal'} className="hidden md:flex"> {/* Show menu only on medium screens and up */}
+                            <Menu mode={'horizontal'} className="hidden md:flex"> {/* Show menu only on medium screens and up 
                                 <Menu.Item key="home">
                                     <Link to={'/'}>Home</Link>
                                 </Menu.Item>
@@ -58,10 +65,10 @@ const Navbar: React.FC = () => {
                                 <Menu.Item key="logout">
                                     <Link to={'/login'} onClick={handleLogOut}>Logout</Link>
                                 </Menu.Item>
-                            </Menu>
+                            </Menu> */}
                         </div>
 
-                        <Drawer
+                        {/* <Drawer
                             title="Menu"
                             placement="right"
                             closable={false}
@@ -82,7 +89,7 @@ const Navbar: React.FC = () => {
                                     <Link to={'/login'} onClick={handleLogOut}>Logout</Link>
                                 </Menu.Item>
                             </Menu>
-                        </Drawer>
+                        </Drawer> */}
                     </div >
                 ) : (
                     <></>

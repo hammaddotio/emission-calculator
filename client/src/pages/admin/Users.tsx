@@ -32,10 +32,10 @@ const Users: React.FC = () => {
         setLoading(true);
         try {
             const response = await axios.get(USER_API, headers);
-            const sortedUsers = response.data.users.sort(
+            const sortedUsers = response.data.data.sort(
                 (a: User, b: User) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
             );
-            console.log(response.data.users);
+            console.log(response.data.data);
             setUsers(sortedUsers);
             setFilteredUsers(sortedUsers);
         } catch (error) {
@@ -63,22 +63,6 @@ const Users: React.FC = () => {
     // Handle pagination
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-    };
-
-    // Action Handlers (placeholder functions for now)
-    const viewUser = (user: User) => {
-        console.log('Viewing user:', user);
-        // Implement view user logic here
-    };
-
-    const updateUser = (user: User) => {
-        console.log('Updating user:', user);
-        // Implement update user logic here
-    };
-
-    const deleteUser = (user: User) => {
-        console.log('Deleting user:', user);
-        // Implement delete user logic here
     };
 
     // Columns for the table

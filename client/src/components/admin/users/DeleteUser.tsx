@@ -3,6 +3,7 @@ import { Popconfirm, Button, message } from 'antd';
 import axios from 'axios';
 import { DeleteOutlined } from '@ant-design/icons';
 import { USER_API } from '../../../utils/api/apis';
+import { headers } from '../../../utils/api/apiHeaders';
 
 interface DeleteUserProps {
     user: { _id: string; username: string }; // User data structure
@@ -13,7 +14,7 @@ const DeleteUser: React.FC<DeleteUserProps> = ({ user, fetchUsers }) => {
     // Function to handle the delete action
     const handleDelete = async () => {
         try {
-            await axios.delete(`${USER_API}/${user._id}`);
+            await axios.delete(`${USER_API}/${user._id}`, headers);
             message.success(`User ${user.username} deleted successfully!`); // Display success message
             fetchUsers(); // Refresh the user list
         } catch (error) {
