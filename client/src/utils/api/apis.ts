@@ -1,5 +1,6 @@
 // export const SERVER_URL: string = 'http://127.0.0.1:3000'
-export const SERVER_URL: string = 'http://192.168.1.7:3000'
+// export const SERVER_URL: string = 'http://192.168.1.7:3000'
+export const SERVER_URL: string = 'passing-carmine-mady-5a54fdb8.koyeb.app/'
 
 // -------------------------------------------------CALCULATORS------------------------------------------------- 
 // MOBILE_COMBUSTION_API
