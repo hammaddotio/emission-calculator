@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, message, Table } from 'antd';
+import { Input, InputNumber, Button, message, Table } from 'antd';
 import axios from 'axios';
 import { ELECTRICITY_SUPPLY_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -59,7 +59,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
 
     // Check if the button should be enabled (if any row is filled)
     const checkIfButtonShouldBeEnabled = (data: MonthData) => {
-        const isRowFilled: any = data.description && data.electricityPurchased && data.powerCompanySpecific && companyName;
+        const isRowFilled: any = data.electricityPurchased && data.powerCompanySpecific && companyName;
         setIsButtonEnabled(isRowFilled);
     };
 
@@ -95,9 +95,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Electricity Purchased (kWh)',
             dataIndex: 'electricityPurchased',
             key: 'electricityPurchased',
-            render: () => (
-                <Input
-                    type='number'
+            render: (_: any) => (
+                <InputNumber
                     placeholder="Enter kWh"
                     value={monthData.electricityPurchased}
                     min={0}
@@ -109,9 +108,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Emission Factor (kg CO₂e/kWh)',
             dataIndex: 'emissionFactor',
             key: 'emissionFactor',
-            render: () => (
-                <Input
-                    type='number'
+            render: (_: any) => (
+                <InputNumber
                     placeholder="Emission Factor"
                     value={monthData.emissionFactor}
                     min={0}
@@ -123,9 +121,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Power Company Specific',
             dataIndex: 'powerCompanySpecific',
             key: 'powerCompanySpecific',
-            render: () => (
-                <Input
-                    type='number'
+            render: (_: any) => (
+                <InputNumber
                     placeholder="Power Company Specific"
                     value={monthData.powerCompanySpecific}
                     min={0}
@@ -137,7 +134,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Facility / Source Description',
             dataIndex: 'description',
             key: 'description',
-            render: () => (
+            render: (_: string) => (
                 <Input
                     placeholder="Enter description"
                     value={monthData.description}
@@ -149,7 +146,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Indirect GHG Emissions (tonnes CO₂e)',
             dataIndex: 'emissions',
             key: 'emissions',
-            render: () => monthData.emissions.toFixed(2)
+            render: (_: number) => monthData.emissions.toFixed(2)
         }
     ];
 

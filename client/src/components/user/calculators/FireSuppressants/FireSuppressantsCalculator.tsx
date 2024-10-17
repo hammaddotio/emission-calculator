@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Button, Select, message, Empty } from 'antd';
+import { Table, InputNumber, Button, Select, message, Empty } from 'antd';
 import axios from 'axios';
 import { FIRE_SUPPRESSANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -104,8 +104,8 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'inventoryChange',
             key: 'inventoryChange',
             className: 'text-right',
-            render: (record: GasData) => (
-                <Input type={'number'} value={record.inventoryChange} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'inventoryChange')} />
+            render: (_: any, record: GasData) => (
+                <InputNumber value={record.inventoryChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'inventoryChange')} />
             ),
         },
         {
@@ -113,8 +113,8 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'transferredAmount',
             key: 'transferredAmount',
             className: 'text-right',
-            render: (record: GasData) => (
-                <Input type={'number'} value={record.transferredAmount} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'transferredAmount')} />
+            render: (_: any, record: GasData) => (
+                <InputNumber value={record.transferredAmount} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'transferredAmount')} />
             ),
         },
         {
@@ -122,8 +122,8 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'capacityChange',
             key: 'capacityChange',
             className: 'text-right',
-            render: (record: GasData) => (
-                <Input type={'number'} value={record.capacityChange} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'capacityChange')} />
+            render: (_: any, record: GasData) => (
+                <InputNumber value={record.capacityChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'capacityChange')} />
             ),
         },
         {
