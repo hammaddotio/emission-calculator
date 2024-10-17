@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { Menu, Button, Drawer } from "antd";
+import React from "react";
+import { Menu } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate()
-    const [visible, setVisible] = useState(false);
+    // const [visible, setVisible] = useState(false);
     const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated)
     const logout = useSelector((state: any) => state.auth.logout)
     console.log(isAuthenticated)
 
-    const showDrawer = () => {
-        setVisible(true);
-    };
+    // const showDrawer = () => {
+    //     setVisible(true);
+    // };
 
-    const onClose = () => {
-        setVisible(false);
-    };
+    // const onClose = () => {
+    //     setVisible(false);
+    // };
     const handleLogOut = () => {
         localStorage.removeItem('token')
         logout()

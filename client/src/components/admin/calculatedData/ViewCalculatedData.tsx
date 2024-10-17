@@ -1,5 +1,5 @@
 // ViewCalculatedData.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Button } from 'antd';
 
 const ViewCalculatedData = ({ data }: any) => {
@@ -31,7 +31,7 @@ const ViewCalculatedData = ({ data }: any) => {
                 <h3>Company Name: {data.companyName}</h3>
                 <h4>Electricity Supplies:</h4>
                 <ul>
-                    {data.facilityData?.map((item) => (
+                    {data.facilityData?.map((item: any) => (
                         <li key={item._id}>
                             <strong>Description:</strong> {item.description} <br />
                             <strong>Electricity Purchased:</strong> {item.electricityPurchased} kWh <br />

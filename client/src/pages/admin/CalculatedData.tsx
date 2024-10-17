@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Popconfirm, Input, Select } from 'antd';
+import { Table, Button, Input, Select } from 'antd';
 import axios from 'axios';
 import { headers } from '../../utils/api/apiHeaders';
 import Loading from '../../common/extra/Loading';

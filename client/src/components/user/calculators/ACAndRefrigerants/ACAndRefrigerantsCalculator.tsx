@@ -3,7 +3,6 @@ import { Table, InputNumber, Button, Select, message } from 'antd';
 import axios from 'axios';
 import { REFRIGERANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
-import { UNSAFE_ErrorResponseImpl } from 'react-router-dom';
 
 // Define the data type for refrigerant records
 interface RefrigerantRecord {

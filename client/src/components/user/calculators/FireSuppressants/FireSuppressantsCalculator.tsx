@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, InputNumber, Button, Select, message, Empty, Spin } from 'antd';
+import { Table, InputNumber, Button, Select, message, Empty } from 'antd';
 import axios from 'axios';
 import { FIRE_SUPPRESSANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';

@@ -2,12 +2,10 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './auth/authSlice';
-import co2CalculatorReducer from './calculators/co2Calculator/co2CalculatorSlice'
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    co2Calculator: co2CalculatorReducer,
   },
 });
 

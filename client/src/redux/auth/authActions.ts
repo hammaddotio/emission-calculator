@@ -2,7 +2,6 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { User } from './authTypes';
 
 // Async thunk for login
 export const loginUser = createAsyncThunk(

@@ -1,8 +1,6 @@
 // src/redux/auth/authSlice.ts
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { URL } from './utils/link';
+import { createSlice } from '@reduxjs/toolkit';
 import { registerUser,loginUser } from './authThunk';
 
 // Define types for user data

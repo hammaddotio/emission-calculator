@@ -1,6 +1,5 @@
 import React from 'react';
 import { Column } from '@ant-design/plots';
-import { Select } from 'antd';
 
 interface BarChartData {
     type: string;
