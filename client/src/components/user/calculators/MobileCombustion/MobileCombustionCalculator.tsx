@@ -135,7 +135,7 @@ const FuelEmissionCalculator: React.FC = () => {
         {
             title: 'Amount of Fuel Used (liters)',
             dataIndex: 'amount',
-            render: (text: number, record: FuelRecord, index: number) => (
+            render: (record: FuelRecord, index: number) => (
                 <Input
                     type="number"
                     value={record.amount || 0}
@@ -149,7 +149,7 @@ const FuelEmissionCalculator: React.FC = () => {
         {
             title: 'CO₂ Emission Factor',
             dataIndex: 'co2EmissionFactor',
-            render: (text: number, record: FuelRecord, index: number) => (
+            render: (record: FuelRecord, index: number) => (
                 <Input
                     type="number"
                     value={record.co2EmissionFactor || 0}
@@ -163,7 +163,7 @@ const FuelEmissionCalculator: React.FC = () => {
         {
             title: 'CH₄ Emission Factor',
             dataIndex: 'ch4EmissionFactor',
-            render: (text: number, record: FuelRecord, index: number) => (
+            render: (record: FuelRecord, index: number) => (
                 <Input
                     type="number"
                     value={record.ch4EmissionFactor || 0}
@@ -177,7 +177,7 @@ const FuelEmissionCalculator: React.FC = () => {
         {
             title: 'N₂O Emission Factor',
             dataIndex: 'n2oEmissionFactor',
-            render: (text: number, record: FuelRecord, index: number) => (
+            render: (record: FuelRecord, index: number) => (
                 <Input
                     type="number"
                     value={record.n2oEmissionFactor || 0}
@@ -191,22 +191,22 @@ const FuelEmissionCalculator: React.FC = () => {
         {
             title: 'CO₂ Emissions (tonnes)',
             dataIndex: 'co2Emissions',
-            render: (text: number, record: FuelRecord) => <div>{record.co2Emissions.toFixed(3)}</div>,
+            render: (record: FuelRecord) => <div>{record.co2Emissions.toFixed(3)}</div>,
         },
         {
             title: 'CH₄ Emissions (tonnes)',
             dataIndex: 'ch4Emissions',
-            render: (text: number, record: FuelRecord) => <div>{record.ch4Emissions.toFixed(3)}</div>,
+            render: (record: FuelRecord) => <div>{record.ch4Emissions.toFixed(3)}</div>,
         },
         {
             title: 'N₂O Emissions (tonnes)',
             dataIndex: 'n2oEmissions',
-            render: (text: number, record: FuelRecord) => <div>{record.n2oEmissions.toFixed(3)}</div>,
+            render: (record: FuelRecord) => <div>{record.n2oEmissions.toFixed(3)}</div>,
         },
         {
             title: 'Total Emissions (tonnes CO₂e)',
             dataIndex: 'totalEmissions',
-            render: (text: number, record: FuelRecord) => <div>{record.totalEmissions.toFixed(3)}</div>,
+            render: (record: FuelRecord) => <div>{record.totalEmissions.toFixed(3)}</div>,
         },
     ];
 
@@ -220,7 +220,7 @@ const FuelEmissionCalculator: React.FC = () => {
                 dataSource={fuelRecords}
                 columns={columns}
                 pagination={false}
-                rowKey={(record, index: undefined | null | any) => index.toString()}
+                rowKey={(index: undefined | null | any) => index.toString()}
             />
             {/* Totals row */}
             <div className="mt-8 p-6 bg-white shadow-lg rounded-lg max-w-sm mx-auto">

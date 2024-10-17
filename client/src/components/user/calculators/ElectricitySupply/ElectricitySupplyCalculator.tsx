@@ -95,7 +95,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Electricity Purchased (kWh)',
             dataIndex: 'electricityPurchased',
             key: 'electricityPurchased',
-            render: (text: any) => (
+            render: () => (
                 <InputNumber
                     placeholder="Enter kWh"
                     value={monthData.electricityPurchased}
@@ -108,7 +108,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Emission Factor (kg CO₂e/kWh)',
             dataIndex: 'emissionFactor',
             key: 'emissionFactor',
-            render: (text: any) => (
+            render: () => (
                 <InputNumber
                     placeholder="Emission Factor"
                     value={monthData.emissionFactor}
@@ -121,7 +121,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Power Company Specific',
             dataIndex: 'powerCompanySpecific',
             key: 'powerCompanySpecific',
-            render: (text: any) => (
+            render: () => (
                 <InputNumber
                     placeholder="Power Company Specific"
                     value={monthData.powerCompanySpecific}
@@ -134,7 +134,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Facility / Source Description',
             dataIndex: 'description',
             key: 'description',
-            render: (text: string) => (
+            render: () => (
                 <Input
                     placeholder="Enter description"
                     value={monthData.description}
@@ -146,7 +146,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             title: 'Indirect GHG Emissions (tonnes CO₂e)',
             dataIndex: 'emissions',
             key: 'emissions',
-            render: (text: number) => monthData.emissions.toFixed(2)
+            render: () => monthData.emissions.toFixed(2)
         }
     ];
 

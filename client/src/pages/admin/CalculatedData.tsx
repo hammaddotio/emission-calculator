@@ -138,7 +138,7 @@ const CalculatedData: React.FC = () => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (text: any, record: CalculatorData) => (
+            render: (record: CalculatorData) => (
                 <span>
                     <ViewCalculatedData data={record} />
                     <Button type="default" onClick={() => handleEdit(record)}>Edit</Button>
@@ -154,16 +154,8 @@ const CalculatedData: React.FC = () => {
         },
     ];
 
-    const handleView = (record: CalculatorData) => {
-        console.log('View record:', record);
-    };
-
     const handleEdit = (record: CalculatorData) => {
         console.log('Edit record:', record);
-    };
-
-    const handleDelete = (record: CalculatorData) => {
-        console.log('Delete record:', record);
     };
 
     if (loading) return <Loading />;

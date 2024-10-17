@@ -131,7 +131,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
         {
             title: 'Amount at Beginning (kg)',
             dataIndex: 'amountBeginning',
-            render: (text: number, record: RefrigerantRecord, index: number) => (
+            render: (record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountBeginning}
                     onChange={(value: number | any) => handleChange(index, 'amountBeginning', value)}
@@ -143,7 +143,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
         {
             title: 'Amount Purchased (kg)',
             dataIndex: 'amountPurchased',
-            render: (text: number, record: RefrigerantRecord, index: number) => (
+            render: (record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountPurchased}
                     onChange={(value: number | any) => handleChange(index, 'amountPurchased', value)}
@@ -155,7 +155,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
         {
             title: 'Amount Disposed (kg)',
             dataIndex: 'amountDisposed',
-            render: (text: number, record: RefrigerantRecord, index: number) => (
+            render: (record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountDisposed}
                     onChange={(value: number | any) => handleChange(index, 'amountDisposed', value)}
@@ -167,7 +167,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
         {
             title: 'Amount at End (kg)',
             dataIndex: 'amountEnd',
-            render: (text: number, record: RefrigerantRecord, index: number) => (
+            render: (record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountEnd}
                     onChange={(value: number | any) => handleChange(index, 'amountEnd', value)}
@@ -179,7 +179,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
         {
             title: 'HFC / PFC Emissions (tonnes CO₂e)',
             dataIndex: 'emissions',
-            render: (text: number, record: RefrigerantRecord) => (
+            render: (record: RefrigerantRecord) => (
                 <div>{record.emissions.toFixed(3)}</div>
             ),
         },

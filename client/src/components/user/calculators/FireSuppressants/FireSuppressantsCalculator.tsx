@@ -104,7 +104,7 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'inventoryChange',
             key: 'inventoryChange',
             className: 'text-right',
-            render: (text: number, record: GasData) => (
+            render: (record: GasData) => (
                 <InputNumber value={record.inventoryChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'inventoryChange')} />
             ),
         },
@@ -113,7 +113,7 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'transferredAmount',
             key: 'transferredAmount',
             className: 'text-right',
-            render: (text: number, record: GasData) => (
+            render: (record: GasData) => (
                 <InputNumber value={record.transferredAmount} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'transferredAmount')} />
             ),
         },
@@ -122,7 +122,7 @@ const FireSuppressants: React.FC = () => {
             dataIndex: 'capacityChange',
             key: 'capacityChange',
             className: 'text-right',
-            render: (text: number, record: GasData) => (
+            render: (record: GasData) => (
                 <InputNumber value={record.capacityChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'capacityChange')} />
             ),
         },

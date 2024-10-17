@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AuthContext = () => {
+const AuthContext: React.FC = () => {
     return (
         <div>
 

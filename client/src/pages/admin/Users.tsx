@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Main from '../../layouts/Main';
-import { Table, Input, Pagination, Button, Space, Spin } from 'antd';
-import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { Table, Input, Pagination, Space } from 'antd';
 import axios from 'axios';
 import { USER_API } from '../../utils/api/apis'; // import the user API
 import ViewUser from './../../components/admin/users/ViewUser';
@@ -93,7 +92,7 @@ const Users: React.FC = () => {
         {
             title: 'Actions',
             key: 'actions',
-            render: (text: any, record: User) => (
+            render: (record: User) => (
                 <Space size="large">
                     {/* View Button */}
                     <ViewUser user={record} />
