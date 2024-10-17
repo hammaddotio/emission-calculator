@@ -4,13 +4,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/auth/authThunk'; // Adjust the import path based on your folder structure
 import { Button, Form, Input, message } from 'antd';
-import { RootState } from '../../redux/store'; // Adjust import based on your store file path
+import { RootState, AppDispatch } from '../../redux/store'; // Adjust import based on your store file path
 import { useNavigate } from 'react-router-dom';
 import Auth from '../../layouts/Auth';
 import { headers } from '../../utils/api/apiHeaders';
 
 const Login: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>(); // Specify the dispatch type here
     const navigate = useNavigate();
     const loading = useSelector((state: RootState) => state.auth.loading);
     const error = useSelector((state: RootState) => state.auth.error);
