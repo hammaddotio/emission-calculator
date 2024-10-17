@@ -5,13 +5,9 @@ import { User } from './authTypes';
 import { LOGIN_API, REGISTER_API } from '../../utils/api/apis';
 
 // Async thunk for login
-export const loginUser = createAsyncThunk<
-  User, // The type of the return value
-  { email: string; password: string }, // The type of the argument
-  { rejectValue: string } // The type for the error payload
->(
+export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }, { rejectWithValue }:any) => {
+  async (credentials:any, { rejectWithValue }:any) => {
     try {
       const response = await axios.post<{ token: string; user: User }>(
         `${LOGIN_API}`, 
@@ -23,9 +19,9 @@ export const loginUser = createAsyncThunk<
       localStorage.setItem('token', response.data.token); // Store token in local storage
       localStorage.setItem('role', response.data.user.user_role); // Store token in local storage
       return response.data.user; // Return user data
-    } catch (error) {
+    } catch (error:null|any) {
       console.log(error)
-      return rejectWithValue(`${error}`);
+      return rejectWithValue(`${error.response.data.message}`);
 
     }
   }

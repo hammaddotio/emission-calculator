@@ -64,7 +64,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     const handleChange = (index: number, field: keyof RefrigerantRecord, value?: number) => {
-        const newRefrigerants: any = [...refrigerants];
+        const newRefrigerants: RefrigerantRecord[] | any = [...refrigerants];
 
         // Set to 0 if value is undefined or null
         newRefrigerants[index][field] = value !== undefined && value !== null ? value : 0;
@@ -80,150 +80,142 @@ const RefrigerantEmissionCalculator: React.FC = () => {
 
     const totalEmissions = refrigerants.reduce((total, record) => total + record.emissions, 0);
 
-    const addRefrigerant = (selectedRefrigerants: string[]) => {
-        const newRefrigerants = selectedRefrigerants.map((type) => {
-            const { gwp } = refrigerantOptions.find(option => option.value === type) || { gwp: 0 };
-            return {
-                refrigerantType: type,
-                amountBeginning: 0,
-                amountPurchased: 0,
-                amountDisposed: 0,
-                amountEnd: 0,
-                gwp,
-                emissions: 0,
-            };
-        });
-        setRefrigerants(newRefrigerants);
+    const addRefrigerant = (selectedValue: string) => {
+        const selectedOption = refrigerantOptions.find(option => option.value === selectedValue);
+        if (selectedOption) {
+            setRefrigerants(prev => [
+                ...prev,
+                {
+                    refrigerantType: selectedOption.value,
+                    amountBeginning: 0,
+                    amountPurchased: 0,
+                    amountDisposed: 0,
+                    amountEnd: 0,
+                    gwp: selectedOption.gwp,
+                    emissions: 0,
+                },
+            ]);
+        } else {
+            message.error('Invalid refrigerant type selected.');
+        }
     };
 
-    const callApi = async () => {
+    const handleSubmit = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const payload = {
-                refrigerants,
-                totalEmissions,
-            };
-            const response = await axios.post(`${REFRIGERANT_API}`, payload, headers);
-            message.success(response.data.message);
-        } catch (error: string | any) {
-            console.log(error.response.data.error ? error[0] : message)
-            message.error(error.response.data.error[0]);
+            await axios.post(REFRIGERANT_API, refrigerants, headers);
+            message.success('Data submitted successfully.');
+            setRefrigerants([]);
+        } catch (error) {
+            console.error(error);
+            message.error('Failed to submit data.');
         } finally {
             setLoading(false);
         }
     };
 
-    const isSubmitDisabled = () => {
-        return refrigerants.some(record =>
-            !record.amountBeginning ||
-            !record.amountPurchased ||
-            !record.amountDisposed ||
-            !record.amountEnd
-        );
-    };
-
     const columns = [
         {
-            title: 'Type of Refrigerant',
+            title: 'Refrigerant Type',
             dataIndex: 'refrigerantType',
-            render: (text: string) => <div>{text}</div>,
+            render: (text: string) => <span>{text}</span>,
         },
         {
-            title: 'Amount at Beginning (kg)',
+            title: 'Amount Beginning',
             dataIndex: 'amountBeginning',
-            render: (record: RefrigerantRecord, index: number) => (
-                <Input
-                    type='number'
-                    value={record.amountBeginning}
-                    onChange={(value: number | any) => handleChange(index, 'amountBeginning', value)}
-                    min={0}
-                    style={{ width: '100%' }}
-                />
-            ),
+            render: (text: number, record: RefrigerantRecord, index: number) => {
+                console.log(record)
+                return (
+                    <Input
+                        type="number"
+                        value={text}
+                        onChange={(e) => handleChange(index, 'amountBeginning', Number(e.target.value))}
+                    />
+                )
+            },
         },
         {
-            title: 'Amount Purchased (kg)',
+            title: 'Amount Purchased',
             dataIndex: 'amountPurchased',
-            render: (record: RefrigerantRecord, index: number) => (
-                <Input
-                    type='number'
-                    value={record.amountPurchased}
-                    onChange={(value: number | any) => handleChange(index, 'amountPurchased', value)}
-                    min={0}
-                    style={{ width: '100%' }}
-                />
-            ),
+            render: (text: number, record: RefrigerantRecord, index: number) => {
+                console.log(record)
+                return (
+                    <Input
+                        type="number"
+                        value={text}
+                        onChange={(e) => handleChange(index, 'amountPurchased', Number(e.target.value))}
+                    />
+                )
+            },
         },
         {
-            title: 'Amount Disposed (kg)',
+            title: 'Amount Disposed',
             dataIndex: 'amountDisposed',
-            render: (record: RefrigerantRecord, index: number) => (
-                <Input
-                    type='number'
-                    value={record.amountDisposed}
-                    onChange={(value: number | any) => handleChange(index, 'amountDisposed', value)}
-                    min={0}
-                    style={{ width: '100%' }}
-                />
-            ),
+            render: (text: number, record: RefrigerantRecord, index: number) => {
+                console.log(record)
+                return (
+                    <Input
+                        type="number"
+                        value={text}
+                        onChange={(e) => handleChange(index, 'amountDisposed', Number(e.target.value))}
+                    />
+                )
+            },
         },
         {
-            title: 'Amount at End (kg)',
+            title: 'Amount End',
             dataIndex: 'amountEnd',
-            render: (record: RefrigerantRecord, index: number) => (
-                <Input
-                    type='number'
-                    value={record.amountEnd}
-                    onChange={(value: number | any) => handleChange(index, 'amountEnd', value)}
-                    min={0}
-                    style={{ width: '100%' }}
-                />
-            ),
+            render: (text: number, record: RefrigerantRecord, index: number) => {
+                console.log(record)
+                return (
+                    <Input
+                        type="number"
+                        value={text}
+                        onChange={(e) => handleChange(index, 'amountEnd', Number(e.target.value))}
+                    />
+                )
+            },
         },
         {
-            title: 'HFC / PFC Emissions (tonnes CO₂e)',
+            title: 'GWP',
+            dataIndex: 'gwp',
+            render: (text: number) => <span>{text}</span>,
+        },
+        {
+            title: 'Emissions (tonnes CO2e)',
             dataIndex: 'emissions',
-            render: (record: RefrigerantRecord) => (
-                <div>{record.emissions.toFixed(3)}</div>
-            ),
+            render: (text: number) => <span>{text.toFixed(2)}</span>,
         },
     ];
 
     return (
-        <div className="p-4 mx-auto">
-            <h1 className="text-center text-2xl font-bold mb-4">Refrigerant Emission Calculator</h1>
+        <div>
             <Select
-                mode="multiple"
-                placeholder="Select Refrigerants"
-                options={refrigerantOptions}
+                placeholder="Select refrigerant type"
                 onChange={addRefrigerant}
-                className="w-full mb-4"
-            />
+                style={{ width: 200, marginBottom: 16 }}
+            >
+                {refrigerantOptions.map((option) => (
+                    <Select.Option key={option.value} value={option.value}>
+                        {option.description}
+                    </Select.Option>
+                ))}
+            </Select>
             <Table
                 dataSource={refrigerants}
                 columns={columns}
-                rowKey="refrigerantType"
                 pagination={false}
-                scroll={{ x: true }}
-                className="table-auto w-full"
+                rowKey="refrigerantType"
             />
-            {refrigerants.length > 0 && (
-                <div className="text-right mb-4">
-                    <strong>Total Emissions: </strong>
-                    {totalEmissions.toFixed(3)} tonnes CO₂e
-                </div>
-            )}
-            {refrigerants.length > 0 && (
-                <Button
-                    loading={loading}
-                    type="primary"
-                    onClick={callApi}
-                    className="w-full mt-4"
-                    disabled={isSubmitDisabled()}
-                >
-                    Submit
-                </Button>
-            )}
+            <Button
+                type="primary"
+                onClick={handleSubmit}
+                loading={loading}
+                style={{ marginTop: 16 }}
+            >
+                Submit
+            </Button>
+            <h3>Total Emissions: {totalEmissions.toFixed(2)} tonnes CO2e</h3>
         </div>
     );
 };

@@ -17,7 +17,7 @@ interface FuelRecord {
 }
 
 const FuelEmissionCalculator: React.FC = () => {
-    const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([
+    const [fuelRecords, setFuelRecords] = useState<FuelRecord[] | any>([
         {
             fuelType: 'Motor Gasoline',
             amount: 0,
@@ -75,7 +75,7 @@ const FuelEmissionCalculator: React.FC = () => {
     // Calculate total emissions for each emission type
     const calculateTotals = () => {
         return fuelRecords.reduce(
-            (totals, record) => {
+            (totals: any, record: any) => {
                 totals.co2Emissions += record.co2Emissions;
                 totals.ch4Emissions += record.ch4Emissions;
                 totals.n2oEmissions += record.n2oEmissions;
@@ -118,7 +118,7 @@ const FuelEmissionCalculator: React.FC = () => {
 
     const isSubmitDisabled = () => {
         return fuelRecords.some(
-            (record) =>
+            (record: any) =>
                 record.amount <= 0 ||
                 record.co2EmissionFactor <= 0 ||
                 record.ch4EmissionFactor <= 0 ||
