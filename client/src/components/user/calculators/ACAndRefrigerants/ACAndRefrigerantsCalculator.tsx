@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, InputNumber, Button, Select, message } from 'antd';
+import { Table, Input, Button, Select, message } from 'antd';
 import axios from 'axios';
 import { REFRIGERANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -132,7 +132,8 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             title: 'Amount at Beginning (kg)',
             dataIndex: 'amountBeginning',
             render: (record: RefrigerantRecord, index: number) => (
-                <InputNumber
+                <Input
+                    type='number'
                     value={record.amountBeginning}
                     onChange={(value: number | any) => handleChange(index, 'amountBeginning', value)}
                     min={0}
@@ -144,7 +145,8 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             title: 'Amount Purchased (kg)',
             dataIndex: 'amountPurchased',
             render: (record: RefrigerantRecord, index: number) => (
-                <InputNumber
+                <Input
+                    type='number'
                     value={record.amountPurchased}
                     onChange={(value: number | any) => handleChange(index, 'amountPurchased', value)}
                     min={0}
@@ -156,7 +158,8 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             title: 'Amount Disposed (kg)',
             dataIndex: 'amountDisposed',
             render: (record: RefrigerantRecord, index: number) => (
-                <InputNumber
+                <Input
+                    type='number'
                     value={record.amountDisposed}
                     onChange={(value: number | any) => handleChange(index, 'amountDisposed', value)}
                     min={0}
@@ -168,7 +171,8 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             title: 'Amount at End (kg)',
             dataIndex: 'amountEnd',
             render: (record: RefrigerantRecord, index: number) => (
-                <InputNumber
+                <Input
+                    type='number'
                     value={record.amountEnd}
                     onChange={(value: number | any) => handleChange(index, 'amountEnd', value)}
                     min={0}

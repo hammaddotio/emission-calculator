@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, InputNumber, Button, Select, message, Empty } from 'antd';
+import { Table, Input, Button, Select, message, Empty } from 'antd';
 import axios from 'axios';
 import { FIRE_SUPPRESSANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -105,7 +105,7 @@ const FireSuppressants: React.FC = () => {
             key: 'inventoryChange',
             className: 'text-right',
             render: (record: GasData) => (
-                <InputNumber value={record.inventoryChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'inventoryChange')} />
+                <Input type={'number'} value={record.inventoryChange} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'inventoryChange')} />
             ),
         },
         {
@@ -114,7 +114,7 @@ const FireSuppressants: React.FC = () => {
             key: 'transferredAmount',
             className: 'text-right',
             render: (record: GasData) => (
-                <InputNumber value={record.transferredAmount} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'transferredAmount')} />
+                <Input type={'number'} value={record.transferredAmount} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'transferredAmount')} />
             ),
         },
         {
@@ -123,7 +123,7 @@ const FireSuppressants: React.FC = () => {
             key: 'capacityChange',
             className: 'text-right',
             render: (record: GasData) => (
-                <InputNumber value={record.capacityChange} min={0} onChange={(value) => handleInputChange(value || 0, record.key, 'capacityChange')} />
+                <Input type={'number'} value={record.capacityChange} min={0} onChange={(value: any) => handleInputChange(value || 0, record.key, 'capacityChange')} />
             ),
         },
         {

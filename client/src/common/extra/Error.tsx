@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React from 'react'
 
-const Error = ({ error }: any) => {
+const Error: React.FC<string | any> = (error: string) => {
     return (
         <div className="flex flex-col items-center justify-center h-screen  p-4 rounded-md border ">
             <h2 className="text-3xl font-semibold mb-2">Oops! Something went wrong.</h2>

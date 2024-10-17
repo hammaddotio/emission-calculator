@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, InputNumber, Button, message, Table } from 'antd';
+import { Input, Button, message, Table } from 'antd';
 import axios from 'axios';
 import { ELECTRICITY_SUPPLY_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -96,7 +96,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             dataIndex: 'electricityPurchased',
             key: 'electricityPurchased',
             render: () => (
-                <InputNumber
+                <Input
+                    type='number'
                     placeholder="Enter kWh"
                     value={monthData.electricityPurchased}
                     min={0}
@@ -109,7 +110,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             dataIndex: 'emissionFactor',
             key: 'emissionFactor',
             render: () => (
-                <InputNumber
+                <Input
+                    type='number'
                     placeholder="Emission Factor"
                     value={monthData.emissionFactor}
                     min={0}
@@ -122,7 +124,8 @@ const ElectricitySupplyCalculator: React.FC = () => {
             dataIndex: 'powerCompanySpecific',
             key: 'powerCompanySpecific',
             render: () => (
-                <InputNumber
+                <Input
+                    type='number'
                     placeholder="Power Company Specific"
                     value={monthData.powerCompanySpecific}
                     min={0}
