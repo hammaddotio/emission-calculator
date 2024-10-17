@@ -7,7 +7,7 @@ import { LOGIN_API, REGISTER_API } from '../../utils/api/apis';
 // Async thunk for login
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (credentials:any, { rejectWithValue }:any) => {
+  async (credentials:any, rejectWithValue?:any) => {
     try {
       const response = await axios.post<{ token: string; user: User }>(
         `${LOGIN_API}`, 
@@ -28,13 +28,9 @@ export const loginUser = createAsyncThunk(
 );
 
 // Async thunk for registration
-export const registerUser = createAsyncThunk<
-  User, // The type of the return value
-  { username: string; email: string; password: string }, // The type of the argument
-  { rejectValue: string } // The type for the error payload
->(
+export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: { username: string; email: string; password: string }, { rejectWithValue }:any) => {
+  async (userData: any, rejectWithValue?:any) => {
     try {
       const response = await axios.post<{ user: User }>(
         `${REGISTER_API}`, 

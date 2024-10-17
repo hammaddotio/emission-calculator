@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk(
 // Async thunk for registration
 export const registerUser = createAsyncThunk(
   'api/v1/auth/register',
-  async (userData: { name: string; email: string; password: string }, { rejectWithValue }) => {
+  async (userData: any, { rejectWithValue }:any) => {
     try {
       const response = await axios.post(`${URL}/api/auth/register`, userData);
       return response.data.user; // Return user data
