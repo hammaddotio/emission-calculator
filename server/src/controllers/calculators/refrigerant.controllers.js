@@ -1,6 +1,6 @@
 // controllers/refrigerantController.js
 import Refrigerant from '../../models/calculators/refrigerant.model.js';
-import { validateRefrigerantData } from '../../validators/RefrigerantValidator.js'
+import { validateRefrigerantData } from '../../validators/refrigerantValidator.js'
 
 // Create new refrigerant data
 export const createRefrigerantData = async (req, res) => {

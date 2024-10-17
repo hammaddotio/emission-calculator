@@ -6,6 +6,7 @@ export const SERVER_URL: string = 'passing-carmine-mady-5a54fdb8.koyeb.app/'
 // MOBILE_COMBUSTION_API
 export const MOBILE_COMBUSTION_API: string = `${SERVER_URL}/api/v1/mobile-combustion`
 
+
 // STATIONARY_COMBUSTION_API
 export const STATIONARY_COMBUSTION_API: string = `${SERVER_URL}/api/v1/stationary-combustion`
 
