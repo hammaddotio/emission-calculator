@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Popconfirm, Input, Select, Spin } from 'antd';
+import { Table, Button, Popconfirm, Input, Select } from 'antd';
 import axios from 'axios';
 import { headers } from '../../utils/api/apiHeaders';
 import Loading from '../../common/extra/Loading';
@@ -11,21 +11,31 @@ import { CALCULATORS_LIST_API } from './../../utils/api/apis';
 const { Search } = Input;
 const { Option } = Select;
 
-const CalculatedData = () => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchText, setSearchText] = useState('');
-    const [filteredData, setFilteredData] = useState([]);
-    const [userFilter, setUserFilter] = useState(null);
-    const [calculatorTypeFilter, setCalculatorTypeFilter] = useState(null);
-    const [users, setUsers] = useState([]); // Store unique usernames
-    const [calculatorTypes, setCalculatorTypes] = useState([]); // Store unique calculator types
+// Define the shape of the calculator data
+interface CalculatorData {
+    username: string;
+    createdAt: string; // or Date if you prefer
+    updatedAt: string; // or Date if you prefer
+    details: any; // Define a more specific type if you know the structure
+    calculatorType: string;
+}
+
+// Define the component
+const CalculatedData: React.FC = () => {
+    const [data, setData] = useState<CalculatorData[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [searchText, setSearchText] = useState<string>('');
+    const [filteredData, setFilteredData] = useState<CalculatorData[]>([]);
+    const [userFilter, setUserFilter] = useState<string | null>(null);
+    const [calculatorTypeFilter, setCalculatorTypeFilter] = useState<string | null>(null);
+    const [users, setUsers] = useState<string[]>([]); // Store unique usernames
+    const [calculatorTypes, setCalculatorTypes] = useState<string[]>([]); // Store unique calculator types
 
     useEffect(() => {
         const fetchCalculators = async () => {
             try {
-                const response = await axios.get(`${CALCULATORS_LIST_API}`, headers);
+                const response = await axios.get<CalculatorData[]>(`${CALCULATORS_LIST_API}`, headers);
                 const combinedData = combineCalculatorData(response.data);
                 setData(combinedData);
                 setFilteredData(combinedData);
@@ -36,8 +46,8 @@ const CalculatedData = () => {
 
                 setUsers(uniqueUsers);
                 setCalculatorTypes(uniqueCalculatorTypes);
-            } catch (err) {
-                setError(err.message);
+            } catch (error: null | any) {
+                setError(error.message);
             } finally {
                 setLoading(false);
             }
@@ -46,13 +56,13 @@ const CalculatedData = () => {
         fetchCalculators();
     }, []);
 
-    const combineCalculatorData = (calculators) => {
-        const combined = [];
+    const combineCalculatorData = (calculators: CalculatorData[]) => {
+        const combined: CalculatorData[] = [];
 
-        Object.entries(calculators).forEach(([key, value]) => {
-            value.forEach(item => {
+        Object.entries(calculators).forEach(([key, value]: any) => {
+            value.forEach((item: CalculatorData | any) => {
                 combined.push({
-                    username: item.user ? item.user.username : 'N/A',
+                    username: item.user ? item.username : 'N/A',
                     createdAt: item.createdAt,
                     updatedAt: item.updatedAt,
                     details: item,
@@ -64,22 +74,22 @@ const CalculatedData = () => {
         return combined;
     };
 
-    const handleSearch = (value) => {
+    const handleSearch = (value: string) => {
         setSearchText(value);
         filterData(userFilter, calculatorTypeFilter, value);
     };
 
-    const handleUserFilterChange = (value) => {
+    const handleUserFilterChange = (value: string | null) => {
         setUserFilter(value);
         filterData(value, calculatorTypeFilter, searchText);
     };
 
-    const handleCalculatorTypeFilterChange = (value) => {
+    const handleCalculatorTypeFilterChange = (value: string | null) => {
         setCalculatorTypeFilter(value);
         filterData(userFilter, value, searchText);
     };
 
-    const filterData = (userFilter, calculatorTypeFilter, searchText) => {
+    const filterData = (userFilter: string | null, calculatorTypeFilter: string | null, searchText: string) => {
         const filtered = data.filter(item => {
             const matchesUser = !userFilter || item.username === userFilter;
             const matchesCalculatorType = !calculatorTypeFilter || item.calculatorType === calculatorTypeFilter;
@@ -95,26 +105,26 @@ const CalculatedData = () => {
             title: 'Username',
             dataIndex: 'username',
             key: 'username',
-            sorter: (a, b) => a.username.localeCompare(b.username),
+            sorter: (a: CalculatorData, b: CalculatorData) => a.username.localeCompare(b.username),
         },
         {
             title: 'Calculator Type',
             dataIndex: 'calculatorType',
             key: 'calculatorType',
-            sorter: (a, b) => a.calculatorType.localeCompare(b.calculatorType),
+            sorter: (a: CalculatorData, b: CalculatorData) => a.calculatorType.localeCompare(b.calculatorType),
         },
         {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (text) => new Date(text).toLocaleString(),
-            sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+            render: (text: string) => new Date(text).toLocaleString(),
+            sorter: (a: CalculatorData, b: CalculatorData) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
         },
         {
             title: 'Updated At',
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: (text, record) => {
+            render: (text: string, record: CalculatorData) => {
                 const updatedDate = new Date(text).toLocaleString();
                 return (
                     <span>
@@ -123,15 +133,16 @@ const CalculatedData = () => {
                     </span>
                 );
             },
-            sorter: (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt),
+            sorter: (a: CalculatorData, b: CalculatorData) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime(),
         },
         {
             title: 'Actions',
             key: 'actions',
-            render: (text, record) => (
+            render: (text: any, record: CalculatorData) => (
                 <span>
                     <ViewCalculatedData data={record} />
                     <Button type="default" onClick={() => handleEdit(record)}>Edit</Button>
+                    {/* Uncomment this part if you want to enable delete functionality */}
                     {/* <Popconfirm
                         title="Are you sure you want to delete this?"
                         onConfirm={() => handleDelete(record)}
@@ -143,24 +154,20 @@ const CalculatedData = () => {
         },
     ];
 
-    const handleView = (record) => {
+    const handleView = (record: CalculatorData) => {
         console.log('View record:', record);
     };
 
-    const handleEdit = (record) => {
+    const handleEdit = (record: CalculatorData) => {
         console.log('Edit record:', record);
     };
 
-    const handleDelete = (record) => {
+    const handleDelete = (record: CalculatorData) => {
         console.log('Delete record:', record);
     };
 
-    if (loading) return (
-        <Loading />
-    )
-    if (error) return (
-        <Error error={error} />
-    );
+    if (loading) return <Loading />;
+    if (error) return <Error error={error} />;
 
     return (
         <Main>

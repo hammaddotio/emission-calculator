@@ -220,7 +220,7 @@ const FuelEmissionCalculator: React.FC = () => {
                 dataSource={fuelRecords}
                 columns={columns}
                 pagination={false}
-                rowKey={(record, index) => index.toString()}
+                rowKey={(record, index: undefined | null | any) => index.toString()}
             />
             {/* Totals row */}
             <div className="mt-8 p-6 bg-white shadow-lg rounded-lg max-w-sm mx-auto">

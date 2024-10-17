@@ -4,7 +4,7 @@ env.config({ path: './.env' })
 import express from "express"
 import { connectDB } from "./db/index.js"
 import cors from 'cors'
-import session from 'express-session';
+// import session from 'express-session';
 
 export const app = express()
 
@@ -22,6 +22,14 @@ app.use(cors(
         // credentials: true
     }
 ))
+app.use(morgan('dev'))
+
+// const limiter = rateLimit({
+//     windowMs: 1 * 60 * 1000, // 1 minute
+//     max: 100, // Limit each IP to 100 requests per minute
+// });
+// app.use('/api/', limiter);
+
 // Session configuration
 // app.use(session({
 //     secret: 'your-secret-key', // Use a strong secret key
@@ -43,6 +51,8 @@ import electricitySupplyRoutes from './routes/calculators/electricitySupply.rout
 import purchasedGasRoutes from './routes/calculators/purchasedGases.routes.js';
 import allCalculatorsRoutes from './routes/calculators/allCalculators.routes.js';
 import pieChartRouter from './routes/charts/pieChart.routes.js';
+import morgan from "morgan"
+import rateLimit from "express-rate-limit"
 
 app.use('/api/v1', authRouter)
 app.use('/api/v1/user', userRouter)
@@ -56,4 +66,4 @@ app.use('/api/v1/', pieChartRouter);
 app.use('/api/v1/', allCalculatorsRoutes);
 
 
-app.listen(PORT, HOST, () => console.log(`Server listening on port ${PORT} `))
+app.listen(PORT, HOST, () => console.log(`Server listening on port ${HOST}:${PORT} `))

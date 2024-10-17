@@ -21,9 +21,12 @@ export const loginUser = createAsyncThunk<
       );
       
       localStorage.setItem('token', response.data.token); // Store token in local storage
+      localStorage.setItem('role', response.data.user.user_role); // Store token in local storage
       return response.data.user; // Return user data
     } catch (error) {
-      return rejectWithValue('Login failed. Please check your credentials.');
+      console.log(error)
+      return rejectWithValue(`${error}`);
+
     }
   }
 );
@@ -31,11 +34,11 @@ export const loginUser = createAsyncThunk<
 // Async thunk for registration
 export const registerUser = createAsyncThunk<
   User, // The type of the return value
-  { name: string; email: string; password: string }, // The type of the argument
+  { username: string; email: string; password: string }, // The type of the argument
   { rejectValue: string } // The type for the error payload
 >(
   'auth/register',
-  async (userData: { name: string; email: string; password: string }, { rejectWithValue }:any) => {
+  async (userData: { username: string; email: string; password: string }, { rejectWithValue }:any) => {
     try {
       const response = await axios.post<{ user: User }>(
         `${REGISTER_API}`, 

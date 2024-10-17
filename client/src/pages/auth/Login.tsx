@@ -17,12 +17,16 @@ const Login: React.FC = () => {
 
     const onFinish = async (values: { email: string; password: string }) => {
         try {
-            const resultAction: any = await dispatch(loginUser({ ...values })); // Dispatch the login action
+            const resultAction = await dispatch(loginUser(values));
 
             if (loginUser.fulfilled.match(resultAction)) {
                 message.success('Login successful!');
                 resultAction.payload.user_role === 'admin' ? navigate('/dashboard') : navigate('/calculators');
-                headers.headers.Authorization = localStorage.getItem('token')
+                // Set the Authorization header with the token
+                const token = localStorage.getItem('token');
+                if (token) {
+                    headers.headers.Authorization = token;
+                }
             } else {
                 // If login failed, display the error returned from the API
                 message.error(error || 'Login failed. Please check your credentials.');

@@ -12,9 +12,10 @@ import Loading from '../../common/extra/Loading';
 import Error from '../../common/extra/Error';
 
 interface User {
-    id: string;
+    _id: string;
     username: string;
     email: string;
+    user_role: 'admin' | 'user';
     createdAt: string; // Assuming createdAt is the field for the date of creation
 }
 
@@ -38,8 +39,13 @@ const Users: React.FC = () => {
             console.log(response.data.data);
             setUsers(sortedUsers);
             setFilteredUsers(sortedUsers);
-        } catch (error) {
-            setError(error.message)
+        } catch (error: null | any) {
+            if (error.response.status === 429) {
+                console.log(error.response)
+                return setError(error.response.data)
+            }
+            // if(error.response.status === 401)
+            setError(error.response.data.error)
             console.error('Error fetching users:', error);
         } finally {
             setLoading(false);

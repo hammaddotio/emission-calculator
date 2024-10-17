@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import Loading from '../components/antdComponents/Loading'
 
-const Auth: React.FC = ({ children, loading }: any) => {
+interface AuthInterface {
+    children?: ReactNode;
+    loading: boolean;
+}
+
+const Auth: React.FC<AuthInterface> = ({ children, loading }: any) => {
 
     if (loading) {
         return <Loading />

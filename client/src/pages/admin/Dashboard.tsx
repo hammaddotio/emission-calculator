@@ -21,6 +21,7 @@ interface User {
     _id: string;
     username: string;
 }
+
 interface CreateUser {
     username: string;
     email: string;
@@ -28,17 +29,16 @@ interface CreateUser {
 }
 
 const Dashboard: React.FC = () => {
-
-    const [pieChartData, setPieChartData] = useState<PieChartData[]>([]);
+    const [pieChartData, setPieChartData] = useState<PieChartData[] | any>([]);
     const [users, setUsers] = useState<User[]>([]);
-    const [selectedUser, setSelectedUser] = useState<string | null>(null);
+    const [selectedUser, setSelectedUser] = useState<string | null | any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     // Fetch users from the API
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${USER_API}`, headers); // Update with your user API endpoint
+            const response = await axios.get(USER_API, headers); // Update with your user API endpoint
             setUsers(response.data.data); // Assuming response.data contains the users array
         } catch (error) {
             console.error('Failed to fetch users', error);
@@ -46,22 +46,19 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    // Updated fetchChartData function
+    // Fetch chart data
     const fetchChartData = async () => {
         setLoading(true);
         try {
             // Fetch data based on selected user ID
-            const url = selectedUser ? `${CALCULATORS_TOTAL_FOR_CHART_API}/${selectedUser}` : `${CALCULATORS_TOTAL_FOR_CHART_API}`;
+            const url = selectedUser ? `${CALCULATORS_TOTAL_FOR_CHART_API}/${selectedUser}` : CALCULATORS_TOTAL_FOR_CHART_API;
             const response = await axios.get(url, headers);
 
-
             // Transform the response data into the desired format for the pie chart
-            const transformedData: PieChartData[] = Object.entries(response.data).map(([key, value]) => {
-                return {
-                    type: key,
-                    value: value as number, // Explicitly cast the value to number
-                };
-            });
+            const transformedData: PieChartData[] = Object.entries(response.data).map(([key, value]) => ({
+                type: key,
+                value: value as number, // Explicitly cast the value to number
+            }));
             setPieChartData(transformedData);
         } catch (error) {
             setError('Failed to fetch data');
@@ -82,43 +79,42 @@ const Dashboard: React.FC = () => {
         fetchChartData(); // Refetch data when selectedUser changes
     }, [selectedUser]);
 
-
-
-    const addNewUser = async (payload) => {
+    // Function to add a new user
+    const addNewUser = async (payload: CreateUser) => {
         setLoading(true);
         try {
-            // Fetch data based on selected user ID
             const response = await axios.post(USER_API, payload, headers);
-            console.log(response.data)
-            message.success(response.data.message)
+            message.success(response.data.message);
             fetchUsers();
             fetchChartData();
-
-        } catch (error) {
-            setError('Failed to fetch data');
+        } catch (error: null | any) {
+            setError('Failed to add user');
             console.error(error?.response?.data?.error);
         } finally {
             setLoading(false);
         }
     };
 
-
-    console.log(pieChartData)
     if (loading) return <Loading />;
     if (error) return <Error error={error} />;
+
     return (
         <Main>
             <AddNewUser addNewUser={addNewUser} />
-            <div className='flex gap-10'>
-                <PieChart
-                    pieChartData={pieChartData}
-                    users={users}
-                    setSelectedUser={setSelectedUser}
-                    selectedUser={selectedUser}
-                />
-                <BarChart
-                    barChartData={pieChartData}
-                />
+            <div className='flex flex-wrap gap-10 justify-center items-center my-10'>
+                <div className='w-full md:w-1/2 lg:w-1/3'> {/* Responsive width for PieChart */}
+                    <PieChart
+                        pieChartData={pieChartData}
+                        users={users}
+                        setSelectedUser={setSelectedUser}
+                        selectedUser={selectedUser}
+                    />
+                </div>
+                <div className='w-full md:w-1/2 lg:w-1/3'> {/* Responsive width for BarChart */}
+                    <BarChart
+                        barChartData={pieChartData}
+                    />
+                </div>
             </div>
             <AllTotals pieChartData={pieChartData} />
         </Main>

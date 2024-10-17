@@ -1,8 +1,6 @@
 import { Pie } from "@ant-design/charts";
 import React from "react";
 import { Select } from "antd";
-import Loading from "../../../common/extra/Loading";
-import Error from "../../../common/extra/Error";
 
 // Define types for props
 interface PieChartData {
@@ -59,14 +57,14 @@ const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUse
 
 
   return (
-    <div className="mx-[64px] my-[32px] w-1/3">
+    <>
       {/* User selection dropdown */}
       <Select
         className=""
         placeholder="Select a user"
         style={{ width: 200, marginBottom: "20px" }}
         onChange={setSelectedUser}
-        value={selectedUser}
+        value={selectedUser.username}
         allowClear
       >
         <Select.Option value={null}>All Users</Select.Option>
@@ -79,7 +77,7 @@ const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUse
 
       {/* Pie Chart */}
       <Pie {...config} />
-    </div>
+    </>
   );
 };
 

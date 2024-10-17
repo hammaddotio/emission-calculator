@@ -156,7 +156,7 @@ const EmissionsTable: React.FC = () => {
                     <Table.Summary fixed>
                         <Table.Summary.Row>
                             <Table.Summary.Cell index={0} colSpan={5} className="font-semibold">Total</Table.Summary.Cell>
-                            <Table.Summary.Cell>{totalGHG.toFixed(2)}</Table.Summary.Cell>
+                            <Table.Summary.Cell index={0} colSpan={5}>{totalGHG.toFixed(2)}</Table.Summary.Cell>
                         </Table.Summary.Row>
                     </Table.Summary>
                 )}

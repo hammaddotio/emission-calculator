@@ -3,13 +3,18 @@ import { Modal, Descriptions, Button, Card, Avatar } from 'antd';
 import { CalendarOutlined, EyeOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'; // Importing an icon for the View button
 
 interface User {
-    id: string;
+    _id: string;
     username: string;
     email: string;
+    user_role: 'admin' | 'user'
     createdAt: string;
 }
 
-const ViewUser: React.FC = ({ user }) => {
+interface ViewUserProps {
+    user: User | null; // user can be null if no user is selected
+}
+
+const ViewUser: React.FC<ViewUserProps> = ({ user }) => {
     const [visible, setVisible] = useState(false); // Local state for modal visibility
 
     // Function to open the modal

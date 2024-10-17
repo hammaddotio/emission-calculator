@@ -16,7 +16,7 @@ interface User {
 const { Option } = Select;
 
 const EditUser: React.FC<{ user: User; fetchUsers: () => void }> = ({ user, fetchUsers }) => {
-    const [formData, setFormData] = useState<Omit<User, 'createdAt'> & { password?: string }>({
+    const [formData, setFormData] = useState<Omit<User | any, 'createdAt'> & { password?: string }>({
         username: user.username,
         email: user.email,
         user_role: user.user_role,

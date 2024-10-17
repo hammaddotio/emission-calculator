@@ -187,13 +187,13 @@ const StationaryCombustion: React.FC = () => {
                                 <Table.Summary.Cell index={0} colSpan={3}>
                                     <strong>Total Emissions</strong>
                                 </Table.Summary.Cell>
-                                <Table.Summary.Cell>
+                                <Table.Summary.Cell index={1}>
                                     <strong>{totalEmissions.co2.toFixed(6)} tonnes CO₂</strong>
                                 </Table.Summary.Cell>
-                                <Table.Summary.Cell>
+                                <Table.Summary.Cell index={2}>
                                     <strong>{totalEmissions.ch4.toFixed(6)} tonnes CH₄</strong>
                                 </Table.Summary.Cell>
-                                <Table.Summary.Cell>
+                                <Table.Summary.Cell index={3}>
                                     <strong>{totalEmissions.n2o.toFixed(6)} tonnes N₂O</strong>
                                 </Table.Summary.Cell>
                             </Table.Summary.Row>

@@ -135,7 +135,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             render: (text: number, record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountBeginning}
-                    onChange={(value) => handleChange(index, 'amountBeginning', value)}
+                    onChange={(value: number | any) => handleChange(index, 'amountBeginning', value)}
                     min={0}
                     style={{ width: '100%' }}
                 />
@@ -147,7 +147,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             render: (text: number, record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountPurchased}
-                    onChange={(value) => handleChange(index, 'amountPurchased', value)}
+                    onChange={(value: number | any) => handleChange(index, 'amountPurchased', value)}
                     min={0}
                     style={{ width: '100%' }}
                 />
@@ -159,7 +159,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             render: (text: number, record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountDisposed}
-                    onChange={(value) => handleChange(index, 'amountDisposed', value)}
+                    onChange={(value: number | any) => handleChange(index, 'amountDisposed', value)}
                     min={0}
                     style={{ width: '100%' }}
                 />
@@ -171,7 +171,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             render: (text: number, record: RefrigerantRecord, index: number) => (
                 <InputNumber
                     value={record.amountEnd}
-                    onChange={(value) => handleChange(index, 'amountEnd', value)}
+                    onChange={(value: number | any) => handleChange(index, 'amountEnd', value)}
                     min={0}
                     style={{ width: '100%' }}
                 />
