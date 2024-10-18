@@ -38,11 +38,11 @@ const fuelRecordSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    }
-}, { _id: false }); // Set _id to false to prevent creating IDs for subdocuments
+    // description: {
+    //     type: String,
+    //     required: true
+    // }
+});
 
 // Define the Mobile Combustion Schema (Parent Schema)
 const mobileCombustionSchema = new mongoose.Schema({

@@ -164,22 +164,22 @@ const StationaryCombustion: React.FC = () => {
         {
             title: 'Total CO₂ Emissions (kg)',
             dataIndex: 'totalCo2Emissions',
-            render: (text: any) => text.toFixed(6),
+            render: (text: any) => text.toFixed(3),
         },
         {
             title: 'Total CH₄ Emissions (kg)',
             dataIndex: 'totalCh4Emissions',
-            render: (text: any) => text.toFixed(6),
+            render: (text: any) => text.toFixed(3),
         },
         {
             title: 'Total N₂O Emissions (kg)',
             dataIndex: 'totalN2oEmissions',
-            render: (text: any) => text.toFixed(6),
+            render: (text: any) => text.toFixed(3),
         },
         {
-            title: 'Total kg CO₂e',
+            title: 'Total kg CO2e',
             dataIndex: 'totalKgCo2e',
-            render: (text: any) => text.toFixed(6),
+            render: (text: any) => text.toFixed(3),
         },
     ];
 
@@ -219,16 +219,16 @@ const StationaryCombustion: React.FC = () => {
                                     <strong>Total Emissions</strong>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={1}>
-                                    <strong>{totalEmissions.co2.toFixed(6)} tonnes CO₂</strong>
+                                    <strong>{totalEmissions.co2.toFixed(3)} tonnes CO₂</strong>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={2}>
-                                    <strong>{totalEmissions.ch4.toFixed(6)} tonnes CH₄</strong>
+                                    <strong>{totalEmissions.ch4.toFixed(3)} tonnes CH₄</strong>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={3}>
-                                    <strong>{totalEmissions.n2o.toFixed(6)} tonnes N₂O</strong>
+                                    <strong>{totalEmissions.n2o.toFixed(3)} tonnes N₂O</strong>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={4}>
-                                    <strong>{totalEmissions.kgCo2e.toFixed(6)} kg CO₂e</strong>
+                                    <strong>{totalEmissions.kgCo2e.toFixed(3)} kg CO₂e</strong>
                                 </Table.Summary.Cell>
                             </Table.Summary.Row>
                         </Table.Summary>

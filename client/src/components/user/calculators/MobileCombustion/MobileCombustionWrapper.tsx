@@ -1,14 +1,16 @@
 import React from 'react'
-import Co2CalculatedData from './MobileCombustionCalculatedData'
-import CO2Calculator from './MobileCombustionCalculator';
+import MobileCombustionCalculatedData from './MobileCombustionCalculatedData'
+import MobileCombustionCalculator from './MobileCombustionCalculator';
+import MobileCombustionDescription from './MobileCombustionDescription';
 
-const Co2Wrapper: React.FC = () => {
+const MobileCombustionWrapper: React.FC = () => {
     return (
         <div>
-            <CO2Calculator />
-            <Co2CalculatedData />
+            <MobileCombustionDescription />
+            <MobileCombustionCalculator />
+            <MobileCombustionCalculatedData />
         </div>
     )
 }
 
-export default Co2Wrapper
+export default MobileCombustionWrapper

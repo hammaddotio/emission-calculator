@@ -11,7 +11,7 @@ interface EmissionData {
     co2EmissionFactor: number; // CO₂Emission factor (fixed at 53.6)
     ch4EmissionFactor: number; // CH₄Emission factor (kg/mmBtu)
     n2oEmissionFactor: number; // N₂OEmission factor (g/mmBtu)
-    indirectGHG: number; // Indirect GHG emissions in tonnes of kg CO₂e
+    indirectGHG: number; // Indirect GHG emissions in kg CO₂e
 }
 
 // Initial data with only one row
@@ -134,7 +134,7 @@ const EmissionsTable: React.FC = () => {
         { title: 'CO₂Emission Factor (kg/mmBtu)', dataIndex: 'co2EmissionFactor', key: 'co2EmissionFactor' },
         { title: 'CH₄Emission Factor (kg/mmBtu)', dataIndex: 'ch4EmissionFactor', key: 'ch4EmissionFactor' },
         { title: 'N₂OEmission Factor (g/mmBtu)', dataIndex: 'n2oEmissionFactor', key: 'n2oEmissionFactor' },
-        { title: 'Indirect GHG Emissions (tonnes kg CO₂e)', dataIndex: 'indirectGHG', key: 'indirectGHG' },
+        { title: 'Indirect GHG Emissions (kg CO₂e)', dataIndex: 'indirectGHG', key: 'indirectGHG' },
         {
             title: 'Action',
             key: 'action',

@@ -14,7 +14,7 @@ interface FuelRecord {
     ch4Emissions: number; // CH₄ Emissions
     n2oEmissions: number; // N₂O Emissions
     totalEmissions: number; // Total emissions
-    description: string; // Description for the fuel record
+    // description: string; // Description for the fuel record
 }
 
 const FuelEmissionCalculator: React.FC = () => {
@@ -29,7 +29,63 @@ const FuelEmissionCalculator: React.FC = () => {
             co2EmissionFactor: 2.35,
             ch4EmissionFactor: 50,
             n2oEmissionFactor: 2
-        }
+        },
+        {
+            label: 'Gas/Diesel oil',
+            value: 'Gas/Diesel oil',
+            co2EmissionFactor: 2.775,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Bio diesel (100%)',
+            value: 'Bio diesel',
+            co2EmissionFactor: 1.928,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Natural Gas Liquid',
+            value: 'Natural Gas Liquid',
+            co2EmissionFactor: 1.574,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Ethanol (100%)',
+            value: 'Ethanol (100%)',
+            co2EmissionFactor: 2.776,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Liquefied Petroleum Gasses (LPG)',
+            value: 'Liquefied Petroleum Gasses (LPG)',
+            co2EmissionFactor: 1.653,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Aviation Gasoline',
+            value: 'Aviation Gasoline',
+            co2EmissionFactor: 2.224,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'Kerosene type jet fuel',
+            value: 'Kerosene type jet fuel',
+            co2EmissionFactor: 2.538,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
+        {
+            label: 'CNG',
+            value: 'CNG',
+            co2EmissionFactor: 2.78,
+            ch4EmissionFactor: 0,
+            n2oEmissionFactor: 0
+        },
     ];
 
     const handleFuelTypeChange = (value: string) => {
@@ -50,7 +106,7 @@ const FuelEmissionCalculator: React.FC = () => {
                 ch4Emissions: 0,
                 n2oEmissions: 0,
                 totalEmissions: 0,
-                description: '',
+                // description: '',
             };
             setFuelRecords([...fuelRecords, newRecord]);
             setSelectedFuelType(undefined);
@@ -61,23 +117,25 @@ const FuelEmissionCalculator: React.FC = () => {
         const newRecords: any = [...fuelRecords];
         const parsedValue = parseFloat(value);
 
-        if (!isNaN(parsedValue) || field === 'description') {
-            newRecords[index][field] = field === 'description' ? value : parsedValue;
+        // if (!isNaN(parsedValue) || field === 'description') {
+        // newRecords[index][field] = field === 'description' ? value : parsedValue;
+        newRecords[index][field] = parsedValue;
 
-            if (field !== 'description') {
-                const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
-                const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
-                const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
+        // if (field !== 'description') {
+        if (field === 'amount') {
+            const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
+            const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
+            const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
 
-                newRecords[index].co2Emissions = co2Emissions;
-                newRecords[index].ch4Emissions = ch4Emissions;
-                newRecords[index].n2oEmissions = n2oEmissions;
-                newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
-            }
-
-            setFuelRecords(newRecords);
+            newRecords[index].co2Emissions = co2Emissions;
+            newRecords[index].ch4Emissions = ch4Emissions;
+            newRecords[index].n2oEmissions = n2oEmissions;
+            newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
         }
-    };
+
+        setFuelRecords(newRecords);
+    }
+    // };
 
     const calculateTotals = () => {
         return fuelRecords.reduce(
@@ -109,8 +167,8 @@ const FuelEmissionCalculator: React.FC = () => {
             const response = await axios.post(`${MOBILE_COMBUSTION_API}`, payload, headers);
             message.success(response.data.message);
             // setFuelRecords([]);
-        } catch (error) {
-            message.error('Failed to submit data: ' + (error as Error).message);
+        } catch (error: any) {
+            message.error(error?.response?.data?.message);
         } finally {
             setLoading(false);
         }
@@ -128,7 +186,7 @@ const FuelEmissionCalculator: React.FC = () => {
             render: (_: number, record: FuelRecord, index: number) => (
                 <Input
                     type="number"
-                    value={record.amount || 0}
+                    value={record.amount}
                     onChange={(e) => handleChange(index, 'amount', e.target.value)}
                     min={0}
                     placeholder="Enter amount"
@@ -136,19 +194,19 @@ const FuelEmissionCalculator: React.FC = () => {
                 />
             ),
         },
-        {
-            title: 'Description',
-            dataIndex: 'description',
-            render: (_: string, record: FuelRecord, index: number) => (
-                <Input
-                    type="text"
-                    value={record.description}
-                    onChange={(e) => handleChange(index, 'description', e.target.value)}
-                    placeholder="Enter description"
-                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
-                />
-            ),
-        },
+        // {
+        //     title: 'Description',
+        //     dataIndex: 'description',
+        //     render: (_: string, record: FuelRecord, index: number) => (
+        //         <Input
+        //             type="text"
+        //             value={record.description}
+        //             onChange={(e) => handleChange(index, 'description', e.target.value)}
+        //             placeholder="Enter description"
+        //             style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
+        //         />
+        //     ),
+        // },
         {
             title: 'CO₂ Emission Factor',
             dataIndex: 'co2EmissionFactor',
@@ -180,13 +238,14 @@ const FuelEmissionCalculator: React.FC = () => {
             render: (_: number, record: FuelRecord) => <div>{record.n2oEmissions.toFixed(3)}</div>,
         },
         {
-            title: 'Total Emissions (kg CO₂e)',
+            title: 'Total Emissions (kg CO2e)',
             dataIndex: 'totalEmissions',
             render: (_: number, record: FuelRecord) => <div>{record.totalEmissions.toFixed(3)}</div>,
         },
     ];
 
-    const isAnyInputEmpty = fuelRecords.some(record => record.amount === 0 || record.description.trim() === '');
+    // const isAnyInputEmpty = fuelRecords.some(record => record.amount === 0 || record.description.trim() === '');
+    const isAnyInputEmpty = fuelRecords.some(record => record.amount === 0);
 
     return (
         <div className="p-4 mx-auto">

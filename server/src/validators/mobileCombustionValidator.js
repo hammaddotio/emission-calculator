@@ -66,12 +66,6 @@ const fuelRecordSchema = Joi.object({
             'number.base': 'N2O emissions must be a number',
             'number.min': 'N2O emissions must be a positive number'
         }),
-    description: Joi.string()
-        .required()
-        .messages({
-            'any.required': 'Description is required',
-            'string.base': 'Description must be a string',
-        }),
     // description: Joi.string()
     //     .required()
     //     .messages({
