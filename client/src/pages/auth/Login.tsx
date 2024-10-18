@@ -18,6 +18,7 @@ const Login: React.FC = () => {
     const onFinish = async (values: { email: string; password: string }) => {
         try {
             const resultAction = await dispatch(loginUser(values));
+            // const resultAction = await dispatch();
 
             if (loginUser.fulfilled.match(resultAction)) {
                 message.success('Login successful!');

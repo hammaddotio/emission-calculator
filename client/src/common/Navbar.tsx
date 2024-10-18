@@ -1,14 +1,20 @@
 import React from "react";
 import { Menu } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from "../redux/auth/authSlice";
+
+
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     // const [visible, setVisible] = useState(false);
     const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated)
-    const logout = useSelector((state: any) => state.auth.logout)
+    const userRole = useSelector((state: any) => state.auth.userRole)
+    // const logout = useSelector((state: any) => state.auth.logout)
     console.log(isAuthenticated)
+    console.log(userRole)
 
     // const showDrawer = () => {
     //     setVisible(true);
@@ -18,8 +24,7 @@ const Navbar: React.FC = () => {
     //     setVisible(false);
     // };
     const handleLogOut = () => {
-        localStorage.removeItem('token')
-        logout()
+        dispatch(logout())
         navigate('/login')
     }
 
@@ -37,10 +42,12 @@ const Navbar: React.FC = () => {
                                 <Menu.Item key="logout">
                                     <Link onClick={handleLogOut} to={'/'}>Logout</Link>
                                 </Menu.Item>
-
-                                <Menu.Item key="users">
-                                    <Link to={'/users'}>Users</Link>
-                                </Menu.Item>
+                                {
+                                    userRole === 'admin' &&
+                                    <Menu.Item key="users">
+                                        <Link to={'/users'}>Users</Link>
+                                    </Menu.Item>
+                                }
                             </Menu>
 
                             {/* <Button

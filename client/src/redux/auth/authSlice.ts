@@ -8,13 +8,13 @@ interface User {
   id: string;
   username: string;
   email: string;
-  user_role: string;
+  userRole: string;
 }
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  user_role: string;
+  userRole: string;
   loading: boolean;
   error: string | null;
 }
@@ -23,7 +23,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   isAuthenticated: localStorage.getItem('token') ? true : false,
-  user_role: localStorage.getItem('role') ?? '',
+  userRole: localStorage.getItem('role') || '',
   loading: false,
   error: null,
 };
@@ -37,8 +37,10 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.user = null;
-      state.user_role = '';
-      // No need to remove token since we are using HTTP-only cookies
+      state.userRole = '';
+      console.log('logout')
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
     },
   },
   extraReducers: (builder) => {
@@ -63,7 +65,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload; // Set user data
-        state.user_role = action.payload.user_role
+        state.userRole = action.payload.user_role
         state.isAuthenticated = true; // User is now authenticated
 
       })
