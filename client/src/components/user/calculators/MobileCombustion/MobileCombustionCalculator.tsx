@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, message, Input } from 'antd';
+import { Table, Button, message, Input, Select } from 'antd';
 import axios from 'axios';
 import { MOBILE_COMBUSTION_API } from '../../../../utils/api/apis';
 import { headers } from './../../../../utils/api/apiHeaders';
@@ -14,60 +14,69 @@ interface FuelRecord {
     ch4Emissions: number; // CH₄ Emissions
     n2oEmissions: number; // N₂O Emissions
     totalEmissions: number; // Total emissions
+    description: string; // Description for the fuel record
 }
 
 const FuelEmissionCalculator: React.FC = () => {
-    const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([
+    const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([]);
+    const [selectedFuelType, setSelectedFuelType] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const fuelOptions = [
         {
-            fuelType: 'Motor Gasoline',
-            amount: 0,
+            label: 'Motor Gasoline',
+            value: 'Motor Gasoline',
             co2EmissionFactor: 2.35,
             ch4EmissionFactor: 50,
-            n2oEmissionFactor: 2,
-            co2Emissions: 0,
-            ch4Emissions: 0,
-            n2oEmissions: 0,
-            totalEmissions: 0,
-        },
-    ]);
+            n2oEmissionFactor: 2
+        }
+    ];
 
-    const [loading, setLoading] = useState<boolean>(false);
+    const handleFuelTypeChange = (value: string) => {
+        setSelectedFuelType(value);
+        addNewRow(value);
+    };
+
+    const addNewRow = (fuelType: string) => {
+        const selectedFuel = fuelOptions.find(option => option.value === fuelType);
+        if (selectedFuel) {
+            const newRecord: FuelRecord = {
+                fuelType,
+                amount: 0,
+                co2EmissionFactor: selectedFuel.co2EmissionFactor,
+                ch4EmissionFactor: selectedFuel.ch4EmissionFactor,
+                n2oEmissionFactor: selectedFuel.n2oEmissionFactor,
+                co2Emissions: 0,
+                ch4Emissions: 0,
+                n2oEmissions: 0,
+                totalEmissions: 0,
+                description: '',
+            };
+            setFuelRecords([...fuelRecords, newRecord]);
+            setSelectedFuelType(undefined);
+        }
+    };
 
     const handleChange = (index: number, field: keyof FuelRecord, value: string) => {
         const newRecords: any = [...fuelRecords];
         const parsedValue = parseFloat(value);
 
-        if (!isNaN(parsedValue)) {
-            newRecords[index][field] = parsedValue;
+        if (!isNaN(parsedValue) || field === 'description') {
+            newRecords[index][field] = field === 'description' ? value : parsedValue;
 
-            const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
-            const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
-            const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
+            if (field !== 'description') {
+                const co2Emissions = (newRecords[index].amount * newRecords[index].co2EmissionFactor) / 1000;
+                const ch4Emissions = (newRecords[index].amount * newRecords[index].ch4EmissionFactor) / (1000 * 1000) * 28;
+                const n2oEmissions = (newRecords[index].amount * newRecords[index].n2oEmissionFactor) / (1000 * 1000) * 265;
 
-            newRecords[index].co2Emissions = co2Emissions;
-            newRecords[index].ch4Emissions = ch4Emissions;
-            newRecords[index].n2oEmissions = n2oEmissions;
-            newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
+                newRecords[index].co2Emissions = co2Emissions;
+                newRecords[index].ch4Emissions = ch4Emissions;
+                newRecords[index].n2oEmissions = n2oEmissions;
+                newRecords[index].totalEmissions = co2Emissions + ch4Emissions + n2oEmissions;
+            }
 
             setFuelRecords(newRecords);
         }
-    };
-
-    const addFuelRecord = () => {
-        setFuelRecords([
-            ...fuelRecords,
-            {
-                fuelType: 'Motor Gasoline',
-                amount: 0,
-                co2EmissionFactor: 2.35,
-                ch4EmissionFactor: 50,
-                n2oEmissionFactor: 2,
-                co2Emissions: 0,
-                ch4Emissions: 0,
-                n2oEmissions: 0,
-                totalEmissions: 0,
-            },
-        ]);
     };
 
     const calculateTotals = () => {
@@ -99,6 +108,7 @@ const FuelEmissionCalculator: React.FC = () => {
             };
             const response = await axios.post(`${MOBILE_COMBUSTION_API}`, payload, headers);
             message.success(response.data.message);
+            // setFuelRecords([]);
         } catch (error) {
             message.error('Failed to submit data: ' + (error as Error).message);
         } finally {
@@ -106,15 +116,11 @@ const FuelEmissionCalculator: React.FC = () => {
         }
     };
 
-    const isSubmitDisabled = () => {
-        return fuelRecords.some((record) => record.amount <= 0);
-    };
-
     const columns = [
         {
             title: 'Fuel Type',
             dataIndex: 'fuelType',
-            render: (text: string) => <div>{text}</div>,
+            render: (_: string, record: FuelRecord) => <div>{record.fuelType}</div>,
         },
         {
             title: 'Amount of Fuel Used (liters)',
@@ -126,6 +132,19 @@ const FuelEmissionCalculator: React.FC = () => {
                     onChange={(e) => handleChange(index, 'amount', e.target.value)}
                     min={0}
                     placeholder="Enter amount"
+                    style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
+                />
+            ),
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            render: (_: string, record: FuelRecord, index: number) => (
+                <Input
+                    type="text"
+                    value={record.description}
+                    onChange={(e) => handleChange(index, 'description', e.target.value)}
+                    placeholder="Enter description"
                     style={{ width: '100%', borderRadius: '4px', borderColor: '#d9d9d9' }}
                 />
             ),
@@ -146,67 +165,68 @@ const FuelEmissionCalculator: React.FC = () => {
             render: (_: number, record: FuelRecord) => <div>{record.n2oEmissionFactor}</div>,
         },
         {
-            title: 'CO₂ Emissions (tonnes)',
+            title: 'CO₂ Emissions (kg)',
             dataIndex: 'co2Emissions',
             render: (_: number, record: FuelRecord) => <div>{record.co2Emissions.toFixed(3)}</div>,
         },
         {
-            title: 'CH₄ Emissions (tonnes)',
+            title: 'CH₄ Emissions (kg)',
             dataIndex: 'ch4Emissions',
             render: (_: number, record: FuelRecord) => <div>{record.ch4Emissions.toFixed(3)}</div>,
         },
         {
-            title: 'N₂O Emissions (tonnes)',
+            title: 'N₂O Emissions (kg)',
             dataIndex: 'n2oEmissions',
             render: (_: number, record: FuelRecord) => <div>{record.n2oEmissions.toFixed(3)}</div>,
         },
         {
-            title: 'Total Emissions (tonnes CO₂e)',
+            title: 'Total Emissions (kg CO₂e)',
             dataIndex: 'totalEmissions',
             render: (_: number, record: FuelRecord) => <div>{record.totalEmissions.toFixed(3)}</div>,
         },
     ];
 
+    const isAnyInputEmpty = fuelRecords.some(record => record.amount === 0 || record.description.trim() === '');
+
     return (
         <div className="p-4 mx-auto">
             <h1 className="text-center text-2xl font-bold mb-4">Fuel Emission Calculator</h1>
-            <Button onClick={addFuelRecord} type="primary" className="mb-4">
-                Add Fuel Record
-            </Button>
+            <Select
+                value={selectedFuelType}
+                onChange={handleFuelTypeChange}
+                placeholder="Select fuel type"
+                style={{ width: '100%', marginBottom: '16px' }}
+            >
+                {fuelOptions.map(option => (
+                    <Select.Option key={option.value} value={option.value}>
+                        {option.label}
+                    </Select.Option>
+                ))}
+            </Select>
             <Table
                 dataSource={fuelRecords}
                 columns={columns}
                 pagination={false}
-                rowKey={(_, index: any) => index.toString()}
+                rowKey={(record) => record.fuelType + record.amount}
+                summary={() => (
+                    <Table.Summary.Row>
+                        <Table.Summary.Cell index={0} colSpan={6}>Total</Table.Summary.Cell> {/* Index Cell */}
+                        <Table.Summary.Cell index={5}>{totals.co2Emissions.toFixed(3)}</Table.Summary.Cell>
+                        <Table.Summary.Cell index={6}>{totals.ch4Emissions.toFixed(3)}</Table.Summary.Cell>
+                        <Table.Summary.Cell index={7}>{totals.n2oEmissions.toFixed(3)}</Table.Summary.Cell>
+                        <Table.Summary.Cell index={8}>{totals.totalEmissions.toFixed(3)}</Table.Summary.Cell>
+                    </Table.Summary.Row>
+                )}
             />
-            <div className="mt-8 p-6 bg-white shadow-lg rounded-lg max-w-sm mx-auto">
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
-                        <span className="text-sm font-medium text-gray-600">CO₂ Total</span>
-                        <span className="text-blue-600 font-semibold">{totals.co2Emissions.toFixed(3)} tonnes</span>
-                    </div>
-                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
-                        <span className="text-sm font-medium text-gray-600">CH₄ Total</span>
-                        <span className="text-blue-600 font-semibold">{totals.ch4Emissions.toFixed(3)} tonnes</span>
-                    </div>
-                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
-                        <span className="text-sm font-medium text-gray-600">N₂O Total</span>
-                        <span className="text-blue-600 font-semibold">{totals.n2oEmissions.toFixed(3)} tonnes</span>
-                    </div>
-                    <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
-                        <span className="text-sm font-medium text-gray-600">Total Emissions</span>
-                        <span className="text-blue-600 font-semibold">{totals.totalEmissions.toFixed(3)} tonnes CO₂e</span>
-                    </div>
-                </div>
-            </div>
             <Button
-                onClick={handleSubmit}
                 type="primary"
-                className="mt-4"
+                onClick={handleSubmit}
                 loading={loading}
-                disabled={isSubmitDisabled()}
+                disabled={isAnyInputEmpty}
+                className="mt-4
+                w-full"
             >
-                Submit Data
+                Submit
             </Button>
         </div>
     );

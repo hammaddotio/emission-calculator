@@ -143,7 +143,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             )
         },
         {
-            title: 'Indirect GHG Emissions (tonnes CO₂e)',
+            title: 'Territory Default Value (kg CO₂e/kWh)',
             dataIndex: 'emissions',
             key: 'emissions',
             render: (_: number) => monthData.emissions.toFixed(2)
@@ -178,8 +178,7 @@ const ElectricitySupplyCalculator: React.FC = () => {
             />
 
             <div className="mt-4 text-xl font-semibold text-center">
-                Total Indirect GHG Emissions: {totalEmissions.toFixed(4)} tonnes CO₂e
-            </div>
+                Total Indirect GHG Emissions: {totalEmissions.toFixed(4)} kg CO₂e/kWh</div>
 
             <div className="mt-4 text-center">
                 <Button

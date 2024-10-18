@@ -16,7 +16,7 @@ interface RefrigerantRecord {
 }
 
 const refrigerantOptions = [
-    { value: 'CO2', description: 'CO2', gwp: 1 },
+    { value: 'CO₂', description: 'CO₂', gwp: 1 },
     { value: 'HFC-23', description: 'HFC-23', gwp: 28 },
     { value: 'HFC-32', description: 'HFC-32', gwp: 265 },
     { value: 'HFC-125', description: 'HFC-125', gwp: 12400 },
@@ -177,7 +177,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             ),
         },
         {
-            title: 'HFC / PFC Emissions (tonnes CO₂e)',
+            title: 'HFC / PFC Emissions (kg CO₂e)',
             dataIndex: 'emissions',
             render: (_: any, record: RefrigerantRecord) => (
                 <div>{record.emissions.toFixed(3)}</div>
@@ -206,7 +206,7 @@ const RefrigerantEmissionCalculator: React.FC = () => {
             {refrigerants.length > 0 && (
                 <div className="text-right mb-4">
                     <strong>Total Emissions: </strong>
-                    {totalEmissions.toFixed(3)} tonnes CO₂e
+                    {totalEmissions.toFixed(3)} kg CO₂e
                 </div>
             )}
             {refrigerants.length > 0 && (

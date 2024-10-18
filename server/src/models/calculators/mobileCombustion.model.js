@@ -37,6 +37,10 @@ const fuelRecordSchema = new mongoose.Schema({
     totalEmissions: {
         type: Number,
         required: true
+    },
+    description: {
+        type: String,
+        required: true
     }
 }, { _id: false }); // Set _id to false to prevent creating IDs for subdocuments
 

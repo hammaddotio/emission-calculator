@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Table, Input, Button, message, Typography, Card } from 'antd';
+import { Table, Input, Button, message, Typography, Card, Select } from 'antd';
 import axios from 'axios';
 import { STATIONARY_COMBUSTION_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
-import { FaCloud } from 'react-icons/fa'
+import { FaCloud } from 'react-icons/fa';
 
 const { Title } = Typography;
+const { Option } = Select;
 
 // Define the emission factors type
 interface EmissionFactors {
@@ -30,13 +31,12 @@ interface EmissionData {
 const emissionFactors: EmissionFactors = {
     Diesel: { co2: 2.77, ch4: 4.15, n2o: 28.6 },
     Gas: { co2: 2.77, ch4: 4.15, n2o: 28.6 },
+    // Add other fuel types as needed
 };
 
 const StationaryCombustion: React.FC = () => {
-    const [formData, setFormData] = useState<EmissionData[]>([
-        { key: '1', fuelType: 'Diesel', amountUsed: 0, totalCo2Emissions: 0, totalCh4Emissions: 0, totalN2oEmissions: 0, totalKgCo2e: 0 },
-        { key: '2', fuelType: 'Gas', amountUsed: 0, totalCo2Emissions: 0, totalCh4Emissions: 0, totalN2oEmissions: 0, totalKgCo2e: 0 },
-    ]);
+    const [formData, setFormData] = useState<EmissionData[]>([]);
+    const [selectedFuels, setSelectedFuels] = useState<string[]>([]); // Track selected fuels
     const [error, setError] = useState<string>('');
 
     const calculateEmissionsData = (amountUsed: number, fuelType: string): EmissionData => {
@@ -77,7 +77,7 @@ const StationaryCombustion: React.FC = () => {
         if (index > -1) {
             updatedData[index][field] = field === 'amountUsed' ? (value ? parseFloat(value) : 0) : value;
 
-            // Update emissions data
+            // Update emissions data only when the amount used changes
             if (field === 'amountUsed') {
                 updateEmissionsData(updatedData);
             } else {
@@ -100,6 +100,20 @@ const StationaryCombustion: React.FC = () => {
     };
 
     const totalEmissions = getTotalEmissions(formData);
+
+    const handleFuelSelection = (value: string[]) => {
+        setSelectedFuels(value);
+        const updatedData = value.map(fuelType => ({
+            key: fuelType,
+            fuelType,
+            amountUsed: 0,
+            totalCo2Emissions: 0,
+            totalCh4Emissions: 0,
+            totalN2oEmissions: 0,
+            totalKgCo2e: 0,
+        }));
+        setFormData(updatedData);
+    };
 
     const calculateEmissions = async () => {
         setError('');
@@ -148,31 +162,48 @@ const StationaryCombustion: React.FC = () => {
             ),
         },
         {
-            title: 'Total CO2 Emissions (tonnes)',
+            title: 'Total CO₂ Emissions (kg)',
             dataIndex: 'totalCo2Emissions',
             render: (text: any) => text.toFixed(6),
         },
         {
-            title: 'Total CH4 Emissions (tonnes)',
+            title: 'Total CH₄ Emissions (kg)',
             dataIndex: 'totalCh4Emissions',
             render: (text: any) => text.toFixed(6),
         },
         {
-            title: 'Total N2O Emissions (tonnes)',
+            title: 'Total N₂O Emissions (kg)',
             dataIndex: 'totalN2oEmissions',
             render: (text: any) => text.toFixed(6),
         },
         {
-            title: 'Total kg CO2e',
+            title: 'Total kg CO₂e',
             dataIndex: 'totalKgCo2e',
             render: (text: any) => text.toFixed(6),
         },
     ];
 
     return (
-        <div className="flex justify-center items-center h-screen ">
-            <Card className="max-w-4xl w-full p-6 shadow-lg rounded-lg mt-60">
+        <div className="flex justify-center items-center h-screen">
+            <Card className="max-w-4xl w-full p-6 shadow-lg rounded-lg">
                 <Title level={2} className="text-center text-gray-800 mb-6">Stationary Combustion Calculator</Title>
+
+                <div className="mb-6">
+                    <Select
+                        mode="multiple"
+                        allowClear
+                        placeholder="Select Fuel Types"
+                        value={selectedFuels}
+                        onChange={handleFuelSelection}
+                        style={{ width: '100%' }}
+                    >
+                        {Object.keys(emissionFactors).map(fuelType => (
+                            <Option key={fuelType} value={fuelType}>
+                                {fuelType}
+                            </Option>
+                        ))}
+                    </Select>
+                </div>
 
                 <Table
                     dataSource={formData}
@@ -184,7 +215,7 @@ const StationaryCombustion: React.FC = () => {
                     summary={() => (
                         <Table.Summary fixed>
                             <Table.Summary.Row>
-                                <Table.Summary.Cell index={0} colSpan={3}>
+                                <Table.Summary.Cell index={0} colSpan={2}>
                                     <strong>Total Emissions</strong>
                                 </Table.Summary.Cell>
                                 <Table.Summary.Cell index={1}>
@@ -196,39 +227,22 @@ const StationaryCombustion: React.FC = () => {
                                 <Table.Summary.Cell index={3}>
                                     <strong>{totalEmissions.n2o.toFixed(6)} tonnes N₂O</strong>
                                 </Table.Summary.Cell>
+                                <Table.Summary.Cell index={4}>
+                                    <strong>{totalEmissions.kgCo2e.toFixed(6)} kg CO₂e</strong>
+                                </Table.Summary.Cell>
                             </Table.Summary.Row>
                         </Table.Summary>
                     )}
                 />
 
-                <div className="mt-8 p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold text-gray-800">Total Emissions Summary</h2>
-                        <div className="bg-blue-100 text-blue-600 rounded-full p-2 shadow-sm">
-                            <FaCloud className="text-2xl" /> {/* Emission icon */}
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4">
-                        {[
-                            { label: 'Total CO₂ Emissions', value: totalEmissions.co2.toFixed(6) },
-                            { label: 'Total CH₄ Emissions', value: totalEmissions.ch4.toFixed(6) },
-                            { label: 'Total N₂O Emissions', value: totalEmissions.n2o.toFixed(6) },
-                            { label: 'Total kg CO₂e', value: totalEmissions.kgCo2e.toFixed(6) },
-                        ].map((item, index) => (
-                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg shadow-sm">
-                                <span className="text-sm font-medium text-gray-600">{item.label}</span>
-                                <span className="text-blue-600 font-semibold">{item.value} tonnes</span>
-                            </div>
-                        ))}
-                    </div>
+                <div className="text-center">
+                    <Button
+                        className='w-full'
+                        type="primary"
+                        onClick={calculateEmissions}>
+                        Submit
+                    </Button>
                 </div>
-
-                <Button type="primary" onClick={calculateEmissions} className="mt-4 w-full" size="large">
-                    Submit
-                </Button>
-
-                {error && <p className="text-red-500 text-center mt-2">{error}</p>}
             </Card>
         </div>
     );

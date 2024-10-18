@@ -8,9 +8,9 @@ interface EmissionData {
     key: string;
     facilityDescription: string; // Description of the facility
     amountConsumed: number; // Amount of natural gas consumed (in cubic feet)
-    co2EmissionFactor: number; // CO2 Emission factor (fixed at 53.6)
-    ch4EmissionFactor: number; // CH4 Emission factor (kg/mmBtu)
-    n2oEmissionFactor: number; // N2O Emission factor (g/mmBtu)
+    co2EmissionFactor: number; // CO₂Emission factor (fixed at 53.6)
+    ch4EmissionFactor: number; // CH₄Emission factor (kg/mmBtu)
+    n2oEmissionFactor: number; // N₂OEmission factor (g/mmBtu)
     indirectGHG: number; // Indirect GHG emissions in tonnes of kg CO₂e
 }
 
@@ -131,9 +131,9 @@ const EmissionsTable: React.FC = () => {
                 />
             ),
         },
-        { title: 'CO2 Emission Factor (kg/mmBtu)', dataIndex: 'co2EmissionFactor', key: 'co2EmissionFactor' },
-        { title: 'CH4 Emission Factor (kg/mmBtu)', dataIndex: 'ch4EmissionFactor', key: 'ch4EmissionFactor' },
-        { title: 'N2O Emission Factor (g/mmBtu)', dataIndex: 'n2oEmissionFactor', key: 'n2oEmissionFactor' },
+        { title: 'CO₂Emission Factor (kg/mmBtu)', dataIndex: 'co2EmissionFactor', key: 'co2EmissionFactor' },
+        { title: 'CH₄Emission Factor (kg/mmBtu)', dataIndex: 'ch4EmissionFactor', key: 'ch4EmissionFactor' },
+        { title: 'N₂OEmission Factor (g/mmBtu)', dataIndex: 'n2oEmissionFactor', key: 'n2oEmissionFactor' },
         { title: 'Indirect GHG Emissions (tonnes kg CO₂e)', dataIndex: 'indirectGHG', key: 'indirectGHG' },
         {
             title: 'Action',
