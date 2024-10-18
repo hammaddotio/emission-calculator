@@ -3,7 +3,6 @@ import { Table, Input, Button, message, Typography, Card, Select } from 'antd';
 import axios from 'axios';
 import { STATIONARY_COMBUSTION_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
-import { FaCloud } from 'react-icons/fa';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -37,7 +36,7 @@ const emissionFactors: EmissionFactors = {
 const StationaryCombustion: React.FC = () => {
     const [formData, setFormData] = useState<EmissionData[]>([]);
     const [selectedFuels, setSelectedFuels] = useState<string[]>([]); // Track selected fuels
-    const [error, setError] = useState<string>('');
+    // const [error, setError] = useState<string>('');
 
     const calculateEmissionsData = (amountUsed: number, fuelType: string): EmissionData => {
         const { co2, ch4, n2o } = emissionFactors[fuelType];
@@ -116,7 +115,7 @@ const StationaryCombustion: React.FC = () => {
     };
 
     const calculateEmissions = async () => {
-        setError('');
+        // setError('');
         const totalEmissions = getTotalEmissions(formData);
 
         const payload = {
@@ -140,6 +139,7 @@ const StationaryCombustion: React.FC = () => {
             }
         } catch (error: any) {
             message.error(error.response ? error.response.data.message : error);
+            // setError(error.response)
         }
     };
 

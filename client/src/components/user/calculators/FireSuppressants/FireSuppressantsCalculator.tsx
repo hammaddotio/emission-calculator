@@ -3,7 +3,6 @@ import { Table, Button, Select, message, Empty, Input } from "antd";
 import axios from "axios";
 import { FIRE_SUPPRESSANT_API } from "../../../../utils/api/apis";
 import { headers } from "../../../../utils/api/apiHeaders";
-import { Column } from "@ant-design/plots";
 
 interface GasData {
     key: string;
