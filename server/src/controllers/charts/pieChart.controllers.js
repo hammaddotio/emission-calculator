@@ -88,8 +88,8 @@ export const getCalculatorTotals = async (req, res) => {
         // Prepare response data
         const responseData = {
             "Electricity Usage": formatData(electricitySupply),
-            "fireSuppressant": formatData(fireSuppressant),
-            "mobileCombustion": formatData(mobileCombustion),
+            "Fire Suppressant": formatData(fireSuppressant),
+            "Mobile Combustion": formatData(mobileCombustion),
             "Refrigerant": formatData(refrigerant),
             "Stationary Combustion": formatData(stationaryCombustion),
             "Purchased Gases": formatData(purchasedGases)

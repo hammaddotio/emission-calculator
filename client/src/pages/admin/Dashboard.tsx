@@ -53,6 +53,7 @@ const Dashboard: React.FC = () => {
             // Fetch data based on selected user ID
             const url = selectedUser ? `${CALCULATORS_TOTAL_FOR_CHART_API}/${selectedUser}` : CALCULATORS_TOTAL_FOR_CHART_API;
             const response = await axios.get(url, headers);
+            console.log(response.data)
 
             // Transform the response data into the desired format for the pie chart
             const transformedData: PieChartData[] = Object.entries(response.data).map(([key, value]) => ({

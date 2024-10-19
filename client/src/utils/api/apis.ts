@@ -34,7 +34,7 @@ export const REGISTER_API: string = `${SERVER_URL}/api/v1/auth/register`
 
 // -------------------------------------------------USER-------------------------------------------------
 // USER_API
-export const USER_API: string = `${SERVER_URL}/api/v1/user` 
+export const USER_API: string = `${SERVER_URL}/api/v1/user`
 
 
 
@@ -43,6 +43,6 @@ export const USER_API: string = `${SERVER_URL}/api/v1/user`
 export const CALCULATORS_LIST_API: string = `${SERVER_URL}/api/v1/calculators`
 
 // CALCULATORS_COUNT_FOR_CHART_APIX
-export const CALCULATORS_COUNT_FOR_CHART_API: string = `${SERVER_URL}/api/v1/calculators/count` 
+export const CALCULATORS_COUNT_FOR_CHART_API: string = `${SERVER_URL}/api/v1/calculators/count`
 
-export const CALCULATORS_TOTAL_FOR_CHART_API:string = `${SERVER_URL}/api/v1/calculators/totals` 
+export const CALCULATORS_TOTAL_FOR_CHART_API: string = `${SERVER_URL}/api/v1/calculators/totals` 
