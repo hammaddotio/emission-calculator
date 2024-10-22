@@ -1,6 +1,5 @@
 import { Pie } from "@ant-design/charts";
 import React from "react";
-import { Select } from "antd";
 
 // Define types for props
 interface PieChartData {
@@ -20,7 +19,7 @@ interface PieChartProps {
   setSelectedUser: (value: string | null) => void;
 }
 
-const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUser, selectedUser }) => {
+const PieChart: React.FC<PieChartProps> = ({ pieChartData }) => {
   const config = {
     appendPadding: 10,
     data: pieChartData,
@@ -58,9 +57,6 @@ const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUse
 
   return (
     <>
-      {/* User selection dropdown */}
-
-
       {/* Pie Chart */}
       <Pie {...config} />
     </>

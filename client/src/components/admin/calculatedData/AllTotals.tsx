@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Card, Typography } from 'antd'; // Ant Design components
 import { ColumnsType } from 'antd/es/table';
 
-const { Title } = Typography; // Ant Design's Typography component for consistent text styles
+// const { Title } = Typography; // Ant Design's Typography component for consistent text styles
 
 interface AllTotalsProps {
     pieChartData: { type: string; total: number }[]; // Transformed data passed in as props

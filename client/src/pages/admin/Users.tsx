@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Main from '../../layouts/Main';
+// import Main from '../../layouts/Main';
 import { Table, Input, Pagination, Space } from 'antd';
 import axios from 'axios';
 import { USER_API } from '../../utils/api/apis'; // import the user API

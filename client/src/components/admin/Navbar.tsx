@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Menu, MenuItem, Typography, Avatar, Box, Button } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Menu, MenuItem, Typography, Avatar, Box } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 
 const AdminNavbar: React.FC = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import Main from './../../layouts/Main';
+// import Main from './../../layouts/Main';
 import MobileCombustionWrapper from '../../components/user/calculators/MobileCombustion/MobileCombustionWrapper';
 import StationaryCombustionWrapper from './../../components/user/calculators/StationaryCombustion/StationaryCombustionWrapper';
 import FireSuppressantsWrapper from '../../components/user/calculators/FireSuppressants/FireSuppressantsWrapper';
