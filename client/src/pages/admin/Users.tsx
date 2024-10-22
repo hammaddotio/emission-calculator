@@ -9,6 +9,7 @@ import DeleteUser from './../../components/admin/users/DeleteUser';
 import { headers } from '../../utils/api/apiHeaders';
 import Loading from '../../common/extra/Loading';
 import Error from '../../common/extra/Error';
+import AdminLayout from '../../components/admin/Sidebar';
 
 interface User {
     _id: string;
@@ -119,15 +120,15 @@ const Users: React.FC = () => {
 
 
     return (
-        <Main>
-            <div className='container mx-auto w-4/5 my-10'>
+        <AdminLayout>
+            <div className='container mx-auto w-full lg:w-4/5 my-10 px-4'>
                 <h1 className="text-2xl mb-4">Users</h1>
 
                 {/* Search Input */}
                 <Input.Search
                     placeholder="Search users by name or email"
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ marginBottom: '20px', width: '300px' }}
+                    className="mb-5 w-full sm:w-96" // Full width on small screens, 24rem width (96px) on larger screens
                 />
 
                 {/* Table for displaying users */}
@@ -137,18 +138,21 @@ const Users: React.FC = () => {
                     rowKey="id"
                     loading={loading}
                     pagination={false} // Disable Ant Design pagination to use custom pagination
+                    className="overflow-x-auto" // Handle overflow on small screens
                 />
 
                 {/* Pagination */}
-                <Pagination
-                    current={currentPage}
-                    total={filteredUsers.length}
-                    pageSize={pageSize}
-                    onChange={handlePageChange}
-                    style={{ marginTop: '20px', textAlign: 'right' }}
-                />
+                <div className="mt-5 flex justify-end">
+                    <Pagination
+                        current={currentPage}
+                        total={filteredUsers.length}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                        className="w-full sm:w-auto" // Full width on small screens, auto width on larger screens
+                    />
+                </div>
             </div>
-        </Main>
+        </AdminLayout>
     );
 };
 

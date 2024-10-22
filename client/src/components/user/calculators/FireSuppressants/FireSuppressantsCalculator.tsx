@@ -104,13 +104,14 @@ const FireSuppressants: React.FC = () => {
     });
 
     const handleInputChange = (
-        value: number,
+        value: string | number,
         key: string,
         field: keyof Omit<GasData, "gas" | "gwp" | "co2Equivalent">
     ) => {
+        const numericValue = parseFloat(value as string) || 0;  // Convert to a number
         const updatedData = data.map((item) => {
             if (item.key === key) {
-                const updatedItem = { ...item, [field]: value };
+                const updatedItem = { ...item, [field]: numericValue };
                 updatedItem.co2Equivalent =
                     updatedItem.gwp *
                     (updatedItem.inventoryChange +
@@ -122,6 +123,7 @@ const FireSuppressants: React.FC = () => {
         });
         setData(updatedData);
     };
+
 
     const calculateTotals = () => {
         const totalInventoryChange = filteredData.reduce(
@@ -148,6 +150,8 @@ const FireSuppressants: React.FC = () => {
             totalCO2Equivalent,
         });
     };
+
+
 
     const checkAllInputsValid = () => {
         return filteredData.every(
@@ -207,8 +211,8 @@ const FireSuppressants: React.FC = () => {
                     type={"number"}
                     value={record.inventoryChange}
                     min={0}
-                    onChange={(value: any) =>
-                        handleInputChange(value || 0, record.key, "inventoryChange")
+                    onChange={(e: any) =>
+                        handleInputChange(e.target.value, record.key, "inventoryChange")
                     }
                     className="items-start"
                 />
@@ -224,8 +228,8 @@ const FireSuppressants: React.FC = () => {
                     type={"number"}
                     value={record.transferredAmount}
                     min={0}
-                    onChange={(value: any) =>
-                        handleInputChange(value || 0, record.key, "transferredAmount")
+                    onChange={(e: any) =>
+                        handleInputChange(e.target.value, record.key, "transferredAmount")
                     }
                     className="items-start"
                 />
@@ -241,8 +245,8 @@ const FireSuppressants: React.FC = () => {
                     type={"number"}
                     value={record.capacityChange}
                     min={0}
-                    onChange={(value: any) =>
-                        handleInputChange(value || 0, record.key, "capacityChange")
+                    onChange={(e: any) =>
+                        handleInputChange(e.target.value, record.key, "capacityChange")
                     }
                     className="items-start"
                 />
@@ -285,7 +289,7 @@ const FireSuppressants: React.FC = () => {
 
             <Table
                 columns={columns}
-                dataSource={selectedKeys.length > 0 ? filteredData : []}
+                dataSource={selectedKeys.length >= 0 ? filteredData : []}
                 pagination={false}
                 className="border rounded-lg shadow-sm"
                 locale={{

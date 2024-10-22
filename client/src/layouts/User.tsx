@@ -5,7 +5,7 @@ interface UserProps {
     children?: ReactNode; // Type for children prop
 }
 
-const User: React.FC<UserProps> = ({ children }) => {
+const UserLayout: React.FC<UserProps> = ({ children }) => {
     return (
         <>
             <Navbar />
@@ -15,4 +15,4 @@ const User: React.FC<UserProps> = ({ children }) => {
     );
 };
 
-export default User;
+export default UserLayout;

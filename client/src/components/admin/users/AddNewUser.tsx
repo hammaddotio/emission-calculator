@@ -39,7 +39,7 @@ const AddNewUser: React.FC<AddNewUserInterface> = ({ addNewUser }) => {
         <>
             {/* Button to trigger the modal */}
             <div className='mx-10 my-10 flex justify-end'>
-                <Button type="primary" onClick={showModal}>
+                <Button type="primary" size='middle' onClick={showModal}>
                     Add New User
                 </Button>
             </div>

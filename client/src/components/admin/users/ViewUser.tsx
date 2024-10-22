@@ -44,7 +44,12 @@ const ViewUser: React.FC<ViewUserProps> = ({ user }) => {
                     <Card bordered={false} style={{ backgroundColor: '#f0f2f5', padding: '20px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                             {/* Avatar for the user */}
-                            <Avatar size={64} icon={<UserOutlined />} style={{ marginRight: '20px' }} />
+                            <Avatar
+                                size="large" // Use large size for default, and adjust with Tailwind classes
+                                icon={<UserOutlined />}
+                                className="mr-4 md:mr-6 w-16 h-16 md:w-20 md:h-20"
+                            />
+
                             <div>
                                 {/* User name as a prominent heading */}
                                 <h2 style={{ margin: 0 }}>{user.username}</h2>

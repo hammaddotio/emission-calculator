@@ -44,11 +44,11 @@ const TabItems: TabsProps['items'] = [
 
 const FormTabs: React.FC = () => {
     return (
-        <Main>
+        <>
             <div className='mt-10 mx-20'>
                 <Tabs defaultActiveKey="1" items={TabItems} />
             </div>
-        </Main>
+        </>
     )
 }
 

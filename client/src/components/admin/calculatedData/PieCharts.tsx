@@ -59,21 +59,7 @@ const PieChart: React.FC<PieChartProps> = ({ pieChartData, users, setSelectedUse
   return (
     <>
       {/* User selection dropdown */}
-      <Select
-        className=""
-        placeholder="Select a user"
-        style={{ width: 200, marginBottom: "20px" }}
-        onChange={setSelectedUser}
-        value={selectedUser?.username}
-        allowClear
-      >
-        <Select.Option value={null}>All Users</Select.Option>
-        {users?.map((user) => (
-          <Select.Option key={user?._id} value={user?._id}>
-            {user?.username}
-          </Select.Option>
-        ))}
-      </Select>
+
 
       {/* Pie Chart */}
       <Pie {...config} />

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import Navbar from '../common/Navbar';
+import AdminSideBar from '../components/admin/Sidebar';
 
 interface MainProps {
     children?: ReactNode; // Type for children prop
@@ -8,8 +9,13 @@ interface MainProps {
 const Main: React.FC<MainProps> = ({ children }) => {
     return (
         <>
-            <Navbar />
-            {children}
+            <div className='flex'>
+                <AdminSideBar />
+                {/* <Navbar /> */}
+                <div className='flex-grow p-4'>
+                    {children}
+                </div>
+            </div>
 
         </>
     );

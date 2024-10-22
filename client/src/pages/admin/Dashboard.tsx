@@ -9,7 +9,9 @@ import Loading from '../../common/extra/Loading';
 import Error from '../../common/extra/Error';
 import { headers } from './../../utils/api/apiHeaders';
 import AddNewUser from '../../components/admin/users/AddNewUser';
+import AdminLayout from '../../components/admin/Sidebar';
 import { message } from 'antd';
+import { Select } from 'antd';
 
 // Define types for PieChartData and User
 interface PieChartData {
@@ -100,26 +102,65 @@ const Dashboard: React.FC = () => {
     if (error) return <Error error={error} />;
 
     return (
-        <Main>
-            <AddNewUser addNewUser={addNewUser} />
-            <div className='flex flex-wrap gap-10 justify-center items-center my-10'>
-                <div className='w-full md:w-1/2 lg:w-1/3'> {/* Responsive width for PieChart */}
-                    <PieChart
-                        pieChartData={pieChartData}
-                        users={users}
-                        setSelectedUser={setSelectedUser}
-                        selectedUser={selectedUser}
-                    />
+        <AdminLayout>
+            <div className="flex flex-col p-6 bg-gray-100 min-h-screen">
+                {/* Header Section */}
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl font-bold text-gray-800">User Management</h1>
+                    <div className="flex items-center">
+                        <Select
+                            className="w-full md:w-60 p-2 text-black bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Select a user"
+                            onChange={setSelectedUser}
+                            value={selectedUser?.username}
+                            allowClear
+                        >
+                            <Select.Option value={null}>All Users</Select.Option>
+                            {users?.map((user) => (
+                                <Select.Option key={user?._id} value={user?._id}>
+                                    {user?.username}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                        <AddNewUser addNewUser={addNewUser} />
+                    </div>
                 </div>
-                <div className='w-full md:w-1/2 lg:w-1/3'> {/* Responsive width for BarChart */}
-                    <BarChart
-                        barChartData={pieChartData}
-                    />
+
+                <div className="flex flex-col lg:flex-row gap-6 bg-white rounded-lg shadow-lg p-4">
+                    {/* Right Column - Manage Users, Bar Chart, and Pie Chart */}
+                    <div className="flex flex-col min-w-full lg:w-2/3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Bar Chart */}
+                            <div className="p-4 bg-white rounded-lg shadow hover:shadow-2xl transform transition-all duration-300">
+                                <h3 className="text-xl font-bold mb-4 text-gray-800">User Activity</h3>
+                                <div className="max-w-full">
+                                    <BarChart barChartData={pieChartData} />
+                                </div>
+                            </div>
+
+                            {/* Pie Chart */}
+                            <div className="p-4 bg-white rounded-lg shadow hover:shadow-2xl transform transition-all duration-300">
+                                <h3 className="text-xl font-bold mb-4 text-gray-800">User Distribution</h3>
+                                <PieChart
+                                    pieChartData={pieChartData}
+                                    users={users}
+                                    setSelectedUser={setSelectedUser}
+                                    selectedUser={selectedUser}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <AllTotals pieChartData={pieChartData} />
             </div>
-            <AllTotals pieChartData={pieChartData} />
-        </Main>
+        </AdminLayout>
+
     );
 };
 
 export default Dashboard;
+
+
+
+/*
+*/

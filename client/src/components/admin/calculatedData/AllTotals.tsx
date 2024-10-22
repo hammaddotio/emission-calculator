@@ -17,23 +17,23 @@ const AllTotals: React.FC<AllTotalsProps> = ({ pieChartData }) => {
             dataIndex: 'type',
             key: 'type',
             render: (text) => <strong>{text}</strong>, // Bold text for categories
-            responsive: ['sm'], // Only show on small screens and above
+            // responsive: ['sm'], // Only show on small screens and above
         },
         {
             title: 'Total Value',
             dataIndex: 'value',
             key: 'value',
             align: 'right', // Align numbers to the right
-            render: (value) => value, // Add thousand separators for numbers
+            render: (value) => value.toFixed(2), // Add thousand separators for numbers
         },
     ];
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-6 min-h-screen">
             <Card bordered={false} className="shadow-md">
-                <Title level={2} className="text-center mb-6">
+                {/* <Title level={2} className="text-center mb-6">
                     Overview
-                </Title>
+                </Title> */}
 
                 {/* Table wrapped in a card for a cleaner layout */}
                 <Table
