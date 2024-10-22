@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Main from '../../layouts/Main';
 import PieChart from '../../components/admin/calculatedData/PieCharts';
 import BarChart from '../../components/admin/calculatedData/BarChart';
 import { CALCULATORS_TOTAL_FOR_CHART_API, USER_API } from "../../utils/api/apis";
