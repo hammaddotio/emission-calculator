@@ -4,6 +4,9 @@ import { Menu as MenuIcon, Dashboard as DashboardIcon, People as PeopleIcon, Clo
 import { useNavigate } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { logout } from "../../redux/auth/authSlice";
+import { useDispatch } from 'react-redux';
 
 // Define drawer width
 const drawerWidth = 300;
@@ -17,9 +20,18 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false); // For desktop collapsible drawer
     const navigate = useNavigate();
 
+    const dispatch = useDispatch()
+
+    // Handle logout (placeholder)
+    const handleLogout = () => {
+        console.log('Logout clicked');
+        dispatch(logout())
+    };
+
     const menuItems = [
         { label: 'Dashboard', key: 'dashboard', icon: <DashboardIcon /> },
         { label: 'Users', key: 'users', icon: <PeopleIcon /> },
+        { label: 'Logout', key: 'logout', icon: <ExitToAppIcon />, onClick: handleLogout }, // Updated logout icon
     ];
 
     // Handle toggling mobile drawer
@@ -29,7 +41,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
     // Handle navigation
     const handleMenuItemClick = (key: string) => {
-        navigate(`/${key}`);
+        if (key === 'logout') {
+            handleLogout(); // Call logout logic if logout is clicked
+        } else {
+            navigate(`/${key}`); // Navigate to the corresponding route
+        }
+
         if (isMobile) {
             setMobileOpen(false); // Close the drawer after navigation on mobile
         }

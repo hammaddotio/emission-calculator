@@ -10,7 +10,7 @@ import { headers } from './../../utils/api/apiHeaders';
 import AddNewUser from '../../components/admin/users/AddNewUser';
 import AdminLayout from '../../components/admin/Sidebar';
 import { message } from 'antd';
-import { Select } from 'antd';
+import { Select } from 'antd'; Select
 
 // Define types for PieChartData and User
 interface PieChartData {
