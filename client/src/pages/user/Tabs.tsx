@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Divider } from 'antd';
+import { Tabs } from 'antd';
 import UserLayout from './../../layouts/User';
 import MobileCombustionWrapper from '../../components/user/calculators/MobileCombustion/MobileCombustionWrapper';
 import StationaryCombustionWrapper from './../../components/user/calculators/StationaryCombustion/StationaryCombustionWrapper';

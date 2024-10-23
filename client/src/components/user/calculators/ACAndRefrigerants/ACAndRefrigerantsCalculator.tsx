@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, InputNumber, Button, Select, message, Typography } from 'antd';
+import { Table, InputNumber, Button, message, Typography } from 'antd';
 import axios from 'axios';
 import { REFRIGERANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
