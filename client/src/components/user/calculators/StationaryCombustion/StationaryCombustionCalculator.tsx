@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Table, Input, Button, message, Typography, Card, Select } from 'antd';
+import { Table, Input, Button, message, Typography, Select } from 'antd';
 import axios from 'axios';
 import { STATIONARY_COMBUSTION_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
-import SelectOption from '../../calculatorComponents/SelectOption';
 
-const { Title } = Typography;
 const { Option } = Select;
 
 // Define the emission factors type
@@ -37,8 +35,8 @@ const emissionFactors: EmissionFactors = {
 const StationaryCombustion: React.FC = () => {
     const [formData, setFormData] = useState<EmissionData[]>([]);
     const [selectedFuels, setSelectedFuels] = useState<string[]>([]); // Track selected fuels
-    // const [error, setError] = useState<string>('');
 
+    // Function to calculate emissions
     const calculateEmissionsData = (amountUsed: number, fuelType: string): EmissionData => {
         const { co2, ch4, n2o } = emissionFactors[fuelType];
 
@@ -65,6 +63,7 @@ const StationaryCombustion: React.FC = () => {
         };
     };
 
+    // Update emission data for all rows
     const updateEmissionsData = (updatedData: EmissionData[]) => {
         const newData = updatedData.map(data => calculateEmissionsData(data.amountUsed, data.fuelType));
         setFormData(newData);
@@ -77,7 +76,7 @@ const StationaryCombustion: React.FC = () => {
         if (index > -1) {
             updatedData[index][field] = field === 'amountUsed' ? (value ? parseFloat(value) : 0) : value;
 
-            // Update emissions data only when the amount used changes
+            // Update emissions data when the amount used changes
             if (field === 'amountUsed') {
                 updateEmissionsData(updatedData);
             } else {
@@ -86,6 +85,7 @@ const StationaryCombustion: React.FC = () => {
         }
     };
 
+    // Calculate total emissions
     const getTotalEmissions = (data: EmissionData[]) => {
         const totalEmissions = data.reduce((totals, item) => {
             return {
@@ -101,24 +101,34 @@ const StationaryCombustion: React.FC = () => {
 
     const totalEmissions = getTotalEmissions(formData);
 
+    // Handle fuel selection and add a row for each selected fuel
     const handleFuelSelection = (value: string[]) => {
+        const updatedData = value.map(fuelType => {
+            // Check if this fuelType is already in formData
+            const existingData = formData.find(item => item.fuelType === fuelType);
+
+            if (existingData) {
+                return existingData; // If fuel type is already in the formData, return the existing row
+            }
+
+            // Otherwise, create a new row with default values
+            return {
+                key: fuelType, // Ensure the key is unique
+                fuelType,
+                amountUsed: 0, // Default value
+                totalCo2Emissions: 0,
+                totalCh4Emissions: 0,
+                totalN2oEmissions: 0,
+                totalKgCo2e: 0,
+            };
+        });
+
         setSelectedFuels(value);
-        const updatedData = value.map(fuelType => ({
-            key: fuelType,
-            fuelType,
-            amountUsed: 0,
-            totalCo2Emissions: 0,
-            totalCh4Emissions: 0,
-            totalN2oEmissions: 0,
-            totalKgCo2e: 0,
-        }));
-        setFormData(updatedData);
+        setFormData(updatedData); // Update the formData with new rows
     };
 
+    // Submit and save emissions data
     const calculateEmissions = async () => {
-        // setError('');
-        const totalEmissions = getTotalEmissions(formData);
-
         const payload = {
             emissions: formData,
             totalCo2Emissions: totalEmissions.co2,
@@ -135,17 +145,17 @@ const StationaryCombustion: React.FC = () => {
             const response = await axios.post(`${STATIONARY_COMBUSTION_API}`, payload, headers);
             if (response.data.status) {
                 message.success('Emissions data saved successfully');
-                setFormData([])
-                setSelectedFuels([])
+                setFormData([]);
+                setSelectedFuels([]);
             } else {
                 message.error(response.data.message);
             }
         } catch (error: any) {
             message.error(error.response ? error.response.data.message : error);
-            // setError(error.response)
         }
     };
 
+    // Table columns
     const columns = [
         {
             title: 'Fuel Type',
@@ -187,68 +197,58 @@ const StationaryCombustion: React.FC = () => {
     ];
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <Card className="max-w-4xl w-full p-6 shadow-lg rounded-lg bg-white">
-                <Title level={2} className="text-center text-blue-600 mb-6">Stationary Combustion Calculator</Title>
+        <div className="p-6 mx-auto max-w-full bg-white rounded-lg shadow-lg border border-gray-300">
+            <Typography.Title level={3} className="text-center">
+                Stationary Combustion Emissions
+            </Typography.Title>
 
-                <div className="mb-6">
-                    <SelectOption
-                        placeholder="Select Fuel Types"
-                        value={selectedFuels}
-                        onChange={handleFuelSelection}
-                    >
-                        {Object.keys(emissionFactors).map(fuelType => (
-                            <Option key={fuelType} value={fuelType}>
-                                <span className="text-gray-800">{fuelType}</span>
-                            </Option>
-                        ))}
-                    </SelectOption>
-                </div>
+            <Select
+                mode="multiple"
+                style={{ width: '100%' }}
+                className='mb-4 w-full'
+                placeholder="Select Fuel Types"
+                onChange={handleFuelSelection}
+                value={selectedFuels}
+                size='large'
+            >
+                {Object.keys(emissionFactors).map((fuelType) => (
+                    <Option key={fuelType} value={fuelType}>
+                        {fuelType}
+                    </Option>
+                ))}
+            </Select>
 
-                <Table
-                    dataSource={formData}
-                    columns={columns}
-                    pagination={false}
-                    rowKey="key"
-                    bordered
-                    style={{ width: '100%', marginBottom: '16px' }}
-                    summary={() => (
-                        <Table.Summary fixed>
-                            <Table.Summary.Row>
-                                <Table.Summary.Cell index={0} colSpan={2} className="bg-gray-200 text-gray-800">
-                                    <strong>Total Emissions</strong>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={1} className="bg-gray-100 text-green-600">
-                                    <strong>{totalEmissions.co2.toFixed(3)} tonnes CO₂</strong>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={2} className="bg-gray-100 text-blue-600">
-                                    <strong>{totalEmissions.ch4.toFixed(3)} tonnes CH₄</strong>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={3} className="bg-gray-100 text-purple-600">
-                                    <strong>{totalEmissions.n2o.toFixed(3)} tonnes N₂O</strong>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={4} className="bg-gray-100 text-red-600">
-                                    <strong>{totalEmissions.kgCo2e.toFixed(3)} kg CO₂e</strong>
-                                </Table.Summary.Cell>
-                            </Table.Summary.Row>
-                        </Table.Summary>
-                    )}
-                />
+            <Table
+                dataSource={formData}
+                columns={columns}
+                pagination={false}
+                summary={() => (
+                    <Table.Summary.Row>
+                        <Table.Summary.Cell index={0} colSpan={2} className=" text-green-600">
+                            <strong>Total</strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2} className=" text-blue-600">
+                            <strong>{totalEmissions.co2.toFixed(3)} </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={3} className=" text-orange-600">
+                            <strong>{totalEmissions.ch4.toFixed(3)} </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={4} className=" text-red-600">
+                            <strong>{totalEmissions.n2o.toFixed(3)} </strong>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={5} className=" text-purple-600">
+                            <strong>{totalEmissions.kgCo2e.toFixed(3)} </strong>
+                        </Table.Summary.Cell>
+                    </Table.Summary.Row>
+                )}
+            />
 
-                <div className="text-center">
-                    <Button
-                        className='w-full'
-                        type="primary"
-                        onClick={calculateEmissions}>
-                        <span className="text-white font-semibold">Submit</span>
-                    </Button>
-                </div>
-            </Card>
+            <div className="">
+                <Button type="primary" className="mt-4 px-8" onClick={calculateEmissions}>
+                    Submit
+                </Button>
+            </div>
         </div>
-
-
-
-
     );
 };
 

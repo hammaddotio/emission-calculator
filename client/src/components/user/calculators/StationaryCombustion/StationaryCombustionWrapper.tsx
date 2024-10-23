@@ -5,9 +5,9 @@ import StationaryCombustionDescription from './StationaryCombustionDescription';
 
 const StationaryCombustionWrapper: React.FC = () => {
     return (
-        <div>
-            <StationaryCombustionDescription />
+        <div className='w-full'>
             <StationaryCombustionCalculator />
+            <StationaryCombustionDescription />
             <StationaryCombustionCalculatedData />
         </div>
     )

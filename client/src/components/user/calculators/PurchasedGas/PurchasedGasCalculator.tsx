@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, InputNumber, Button, message } from 'antd';
+import { Table, InputNumber, Button, message, Typography } from 'antd';
 import axios from 'axios';
 import { PURCHASED_GAS_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -147,7 +147,7 @@ const EmissionsTable: React.FC = () => {
 
     return (
         <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Purchased Gas</h2>
+            <Typography.Title level={3} className="text-center">Purchased Gas</Typography.Title>
 
             <Button
                 type="primary"
@@ -161,24 +161,23 @@ const EmissionsTable: React.FC = () => {
                 dataSource={data}
                 columns={columns}
                 pagination={false}
-                className="w-full rounded-lg overflow-auto border border-gray-300"
                 summary={() => (
                     <Table.Summary fixed>
                         <Table.Summary.Row>
-                            <Table.Summary.Cell index={0} colSpan={5} className="font-semibold bg-gray-100">Total</Table.Summary.Cell>
-                            <Table.Summary.Cell index={0} colSpan={5} className="bg-gray-100">{totalGHG.toFixed(2)}</Table.Summary.Cell>
+                            <Table.Summary.Cell index={0} colSpan={5} className="font-semibold">Total</Table.Summary.Cell>
+                            <Table.Summary.Cell index={0} colSpan={5} className="">{totalGHG.toFixed(2)}</Table.Summary.Cell>
                         </Table.Summary.Row>
                     </Table.Summary>
                 )}
             />
 
-            <div className="mt-6 text-center">
+            <div className="">
                 <Button
                     type="primary"
                     onClick={handleSubmit}
                     loading={loading}
                     disabled={isSubmitDisabled}
-                    className="w-full max-w-md mx-auto"
+                    className="mt-4 px-8"
                 >
                     Submit
                 </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, InputNumber, Button, Select, message } from 'antd';
+import { Table, InputNumber, Button, Select, message, Typography } from 'antd';
 import axios from 'axios';
 import { REFRIGERANT_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -190,8 +190,8 @@ const RefrigerantEmissionCalculator: React.FC = () => {
     ];
 
     return (
-        <div className="p-4 sm:p-1 mx-auto bg-white rounded-lg shadow-lg max-w-full md:max-w-3xl lg:max-w-4xl">
-            <h1 className="text-center text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-blue-500">Refrigerant Emission Calculator</h1>
+        <div className="p-6 mx-auto max-w-full bg-white rounded-lg shadow-lg border border-gray-300">
+            <Typography.Title level={3} className="text-center text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-blue-500">Refrigerant Emission Calculator</Typography.Title>
 
             <SelectOption
                 optionsData={refrigerantOptions}
@@ -206,30 +206,32 @@ const RefrigerantEmissionCalculator: React.FC = () => {
                     columns={columns}
                     rowKey="refrigerantType"
                     pagination={false}
-                    scroll={{ x: true }} // Allows horizontal scrolling if needed
-                    className="w-full bg-blue-50 border border-blue-100 rounded-lg shadow-sm"
                 />
             </div>
 
-            {refrigerants.length > 0 && (
-                <div className="text-right mb-4">
-                    <strong className="text-lg text-blue-600">Total Emissions: </strong>
-                    <span className="text-blue-900">{totalEmissions.toFixed(3)} kg CO₂e</span>
-                </div>
-            )}
+            {
+                refrigerants.length > 0 && (
+                    <div className="text-right mb-4">
+                        <strong className="text-lg text-blue-600">Total Emissions: </strong>
+                        <span className="text-blue-900">{totalEmissions.toFixed(3)} kg CO₂e</span>
+                    </div>
+                )
+            }
 
-            {refrigerants.length > 0 && (
-                <Button
-                    loading={loading}
-                    type="primary"
-                    onClick={callApi}
-                    className="w-full mt-4 sm:mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-300"
-                    disabled={isSubmitDisabled()}
-                >
-                    Submit
-                </Button>
-            )}
-        </div>
+            {
+                refrigerants.length > 0 && (
+                    <Button
+                        loading={loading}
+                        type="primary"
+                        onClick={callApi}
+                        className="mt-4 px-8"
+                        disabled={isSubmitDisabled()}
+                    >
+                        Submit
+                    </Button>
+                )
+            }
+        </div >
 
 
     );

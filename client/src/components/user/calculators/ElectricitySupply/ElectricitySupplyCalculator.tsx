@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, InputNumber, Button, message, Table } from 'antd';
+import { Input, InputNumber, Button, message, Table, Typography } from 'antd';
 import axios from 'axios';
 import { ELECTRICITY_SUPPLY_API } from '../../../../utils/api/apis';
 import { headers } from '../../../../utils/api/apiHeaders';
@@ -169,10 +169,10 @@ const ElectricitySupplyCalculator: React.FC = () => {
     ];
 
     return (
-        <div className="container mx-auto p-4 my-4 rounded-lg shadow-md max-w-full sm:max-w-2xl lg:max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
+        <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
+            <Typography.Title level={3} className="text-center">
                 Electricity Supply Emissions Calculator
-            </h2>
+            </Typography.Title>
 
             <div className="mb-4">
                 <Input
@@ -187,20 +187,20 @@ const ElectricitySupplyCalculator: React.FC = () => {
                 dataSource={dataSource}
                 columns={columns}
                 pagination={false}
-                className="w-full overflow-auto border border-gray-300 rounded-lg shadow-sm bg-white"
+                className=""
             />
 
             <div className="mt-4 text-xl font-semibold text-center text-gray-800">
                 Total Indirect GHG Emissions: {totalEmissions.toFixed(4)} kg CO₂e/kWh
             </div>
 
-            <div className="mt-4 text-center">
+            <div className="">
                 <Button
                     type="primary"
                     disabled={!isButtonEnabled}
                     onClick={handleSubmit}
                     loading={loading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition ease-in-out duration-300 w-full sm:w-auto"
+                    className="mt-4 px-8"
                 >
                     Submit
                 </Button>

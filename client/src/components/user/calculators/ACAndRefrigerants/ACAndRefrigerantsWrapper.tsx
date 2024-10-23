@@ -6,8 +6,8 @@ import ACAndRefrigerantsDescription from './ACAndRefrigerantsDescription'
 const ACAndRefrigerantsWrapper: React.FC = () => {
     return (
         <div>
-            <ACAndRefrigerantsDescription />
             <ACAndRefrigerantsCalculator />
+            <ACAndRefrigerantsDescription />
             <ACAndRefrigerantsCalculatedData />
         </div>
     )

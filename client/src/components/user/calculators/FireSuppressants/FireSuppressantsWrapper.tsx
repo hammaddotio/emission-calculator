@@ -6,8 +6,8 @@ import FireSuppressantsDescription from './FireSuppressantsDescription';
 const FireSuppressantsWrapper: React.FC = () => {
     return (
         <div>
-            <FireSuppressantsDescription />
             <FireSuppressantsCalculator />
+            <FireSuppressantsDescription />
             <FireSuppressantsCalculatedData />
         </div>
     )

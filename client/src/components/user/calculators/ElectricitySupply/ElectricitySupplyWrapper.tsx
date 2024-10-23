@@ -6,8 +6,8 @@ import ElectricitySupplyDescription from './ElectricitySupplyDescription';
 const ElectricitySupplyWrapper: React.FC = () => {
     return (
         <div>
-            <ElectricitySupplyDescription />
             <ElectricitySupplyCalculator />
+            <ElectricitySupplyDescription />
             <ElectricitySupplyCalculatedData />
         </div>
     )

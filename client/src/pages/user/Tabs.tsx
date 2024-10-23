@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Tab } from '@mui/material'; // Keep MUI components for Tabs and Tab
+import { Tabs, Divider } from 'antd';
 import UserLayout from './../../layouts/User';
 import MobileCombustionWrapper from '../../components/user/calculators/MobileCombustion/MobileCombustionWrapper';
 import StationaryCombustionWrapper from './../../components/user/calculators/StationaryCombustion/StationaryCombustionWrapper';
@@ -8,15 +8,17 @@ import ACAndRefrigerantsWrapper from '../../components/user/calculators/ACAndRef
 import PurchasedGasWrapper from '../../components/user/calculators/PurchasedGas/PurchasedGasWrapper';
 import ElectricitySupplyWrapper from '../../components/user/calculators/ElectricitySupply/ElectricitySupplyWrapper';
 
-const FormTabs: React.FC = () => {
-    const [value, setValue] = React.useState<string>('1');
+const { TabPane } = Tabs;
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
+const FormTabs: React.FC = () => {
+    const [activeKey, setActiveKey] = React.useState<string>('1');
+
+    const handleChange = (key: string) => {
+        setActiveKey(key);
     };
 
     const renderTabContent = () => {
-        switch (value) {
+        switch (activeKey) {
             case '1':
                 return <MobileCombustionWrapper />;
             case '2':
@@ -36,31 +38,84 @@ const FormTabs: React.FC = () => {
 
     return (
         <UserLayout>
-            <div className="w-full p-4 flex justify-center items-center min-h-screen">
-                {/* Outer Box for Tabs and Content */}
-                <div className="rounded-2xl shadow-lg overflow-auto bg-white w-full max-w-full">
-                    {/* Tabs */}
+            <div className="w-full p-4 flex justify-center items-center min-h-screen bg-gray-100">
+                <div className="rounded-2xl  overflow-auto bg-gray-100 w-full max-w-full">
                     <Tabs
-                        value={value}
+                        activeKey={activeKey}
                         onChange={handleChange}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        textColor="inherit"
-                        indicatorColor="primary"
-                        centered={true}
-                        sx={{
-                            backgroundColor: '#1976d2',
-                            color: '#ffffff',
-                        }}
+                        className="flex justify-center space-x-4"
+                        // tabBarStyle={{ backgroundColor: 'transparent', borderBottom: '0.5px solid rgb(209 213 219)', paddingBottom: '20px' }} // Remove default Ant Design tab styling
+                        centered
                     >
-                        <Tab className="text-white" label="Mobile Combustion" value="1" />
-                        <Tab className="text-white" label="Stationary Combustion" value="2" />
-                        <Tab className="text-white" label="Fire Suppressants" value="3" />
-                        <Tab className="text-white" label="AC & Refrigerants" value="4" />
-                        <Tab className="text-white" label="Purchased Gas" value="5" />
-                        <Tab className="text-white" label="Electricity Supply" value="6" />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '1' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    Mobile Combustion
+                                </span>
+                            }
+                            key="1"
+                        />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '2' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    Stationary Combustion
+                                </span>
+                            }
+                            key="2"
+                        />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '3' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    Fire Suppressants
+                                </span>
+                            }
+                            key="3"
+                        />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '4' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    AC & Refrigerants
+                                </span>
+                            }
+                            key="4"
+                        />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '5' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    Purchased Gas
+                                </span>
+                            }
+                            key="5"
+                        />
+                        <TabPane
+                            tab={
+                                <span
+                                    className={`px-4 py-2 rounded-lg border ${activeKey === '6' ? 'bg-gray-700 text-white' : 'bg-white text-gray-800'
+                                        }`}
+                                >
+                                    Electricity Supply
+                                </span>
+                            }
+                            key="6"
+                        />
                     </Tabs>
-                    {/* Content Box - Render Tab Content Here */}
+                    {/* <Divider /> */}
+
                     <div className="rounded-2xl p-4 bg-gray-100 shadow-lg overflow-auto">
                         {renderTabContent()}
                     </div>

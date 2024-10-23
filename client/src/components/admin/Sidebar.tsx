@@ -1,155 +1,112 @@
 import React, { ReactNode, useState } from 'react';
-import { Box, CssBaseline, AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { Menu as MenuIcon, Dashboard as DashboardIcon, People as PeopleIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Layout, Menu, Drawer, Button, Typography, Avatar } from 'antd';
+import {
+    DashboardOutlined,
+    UserOutlined,
+    MenuOutlined,
+    CloseOutlined,
+    LogoutOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { logout } from "../../redux/auth/authSlice";
 import { useDispatch } from 'react-redux';
+import { logout } from "../../redux/auth/authSlice";
 
-// Define drawer width
-const drawerWidth = 300;
+const { Header, Sider, Content } = Layout;
+
 interface AdminLayoutProps {
-    children?: ReactNode; // Type for children prop
+    children?: ReactNode;
 }
+
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md')); // Check if it's mobile
-    const [mobileOpen, setMobileOpen] = useState(false); // For mobile drawer
-    const [collapsed, setCollapsed] = useState(false); // For desktop collapsible drawer
+    const [collapsed, setCollapsed] = useState(false);
+    const [drawerVisible, setDrawerVisible] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
-
-    // Handle logout (placeholder)
     const handleLogout = () => {
         console.log('Logout clicked');
-        dispatch(logout())
+        dispatch(logout());
     };
 
     const menuItems = [
-        { label: 'Dashboard', key: 'dashboard', icon: <DashboardIcon /> },
-        { label: 'Users', key: 'users', icon: <PeopleIcon /> },
-        { label: 'Logout', key: 'logout', icon: <ExitToAppIcon />, onClick: handleLogout }, // Updated logout icon
+        { label: 'Dashboard', key: 'dashboard', icon: <DashboardOutlined /> },
+        { label: 'Users', key: 'users', icon: <UserOutlined /> },
+        { label: 'Logout', key: 'logout', icon: <LogoutOutlined />, onClick: handleLogout },
     ];
 
-    // Handle toggling mobile drawer
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
-    // Handle navigation
-    const handleMenuItemClick = (key: string) => {
+    const handleMenuClick = (key: string) => {
         if (key === 'logout') {
-            handleLogout(); // Call logout logic if logout is clicked
+            handleLogout();
         } else {
-            navigate(`/${key}`); // Navigate to the corresponding route
+            navigate(`/${key}`);
         }
-
-        if (isMobile) {
-            setMobileOpen(false); // Close the drawer after navigation on mobile
-        }
+        setDrawerVisible(false); // Close the drawer after navigation
     };
 
-    // Drawer content
     const drawerContent = (
-        <div>
-            <Toolbar className='flex justify-between'>
-                {/* {!collapsed && <Typography variant="h6">Admin Panel</Typography>} */}
-                {!collapsed && (
-                    <img
-                        src="/arty-node-logo.png" // Path to your logo image
-                        alt="Admin Panel Logo"
-                        style={{ height: '40px', width: 'auto' }} // Adjust height and width as needed
-                    />
-                )}
-                <IconButton onClick={() => setCollapsed(!collapsed)}>
-                    {collapsed ? <MenuIcon /> : <CloseIcon />}
-                </IconButton>
-            </Toolbar>
-            <Divider />
-            <List>
-                {menuItems.map((item) => (
-                    <ListItem
-                        className="cursor-pointer"
-                        component="div"
-                        key={item.key}
-                        onClick={() => handleMenuItemClick(item.key)}
-                    >
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        {!collapsed && <ListItemText primary={item.label} />}
-                    </ListItem>
-                ))}
-            </List>
-        </div>
+        <Menu
+            mode="inline"
+            theme="light"
+            defaultSelectedKeys={['dashboard']}
+            style={{ width: 256 }}
+        >
+            {menuItems.map((item) => (
+                <Menu.Item
+                    key={item.key}
+                    icon={item.icon}
+                    onClick={() => handleMenuClick(item.key)}
+                >
+                    {item.label}
+                </Menu.Item>
+            ))}
+        </Menu>
     );
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
+        <Layout style={{ minHeight: '100vh' }}>
+            <Header>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Avatar src="/arty-node-logo.png" alt="Admin Panel Logo" style={{ marginRight: 16 }} />
+                    <Typography.Title level={4} style={{ margin: 0 }}>Welcome</Typography.Title>
+                    <Button
+                        type="text"
+                        icon={collapsed ? <MenuOutlined /> : <CloseOutlined />}
+                        onClick={() => setCollapsed(!collapsed)}
+                        style={{ marginLeft: 'auto' }}
+                    />
+                </div>
+            </Header>
+            <Layout>
+                <Sider collapsible collapsed={collapsed}>
+                    {drawerContent}
+                </Sider>
+                <Layout>
+                    <Content style={{ padding: '24px', margin: 0 }}>
+                        {children}
+                    </Content>
+                </Layout>
+            </Layout>
 
-            {/* AppBar for mobile toggle button */}
-            <AppBar position="fixed" sx={{ display: { md: 'none' } }}>
-                <Toolbar>
-                    <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Welcome
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-
-            {/* Responsive drawer for mobile */}
+            {/* Drawer for mobile view */}
             <Drawer
-                variant="permanent"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                }}
-                sx={{
-                    display: { xs: 'block', md: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                }}
+                title="Menu"
+                placement="left"
+                closable={true}
+                onClose={() => setDrawerVisible(false)}
+                visible={drawerVisible}
+                bodyStyle={{ padding: 0 }}
             >
                 {drawerContent}
             </Drawer>
 
-            {/* Permanent drawer for desktop */}
-            <Drawer
-                variant="permanent"
-                open={!collapsed}
-                sx={{
-                    display: { xs: 'none', md: 'block' },
-                    '& .MuiDrawer-paper': {
-                        width: collapsed ? 72 : drawerWidth, // Collapsed width shows only icons
-                        transition: theme.transitions.create('width', {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.leavingScreen,
-                        }),
-                    },
-                }}
-            >
-                {drawerContent}
-            </Drawer>
-
-            {/* Main Content Area */}
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: 3,
-                    width: { md: `calc(100% - ${collapsed ? 72 : drawerWidth}px)` }, // Responsive width
-                    transition: 'width 0.3s', // Smooth transition for width change
-                    marginLeft: { md: collapsed ? '72px' : '300px' }, // Set margin based on drawer state
-                }}
-            >
-                <Toolbar /> {/* Spacer for fixed AppBar */}
-                {children} {/* Your main content goes here */}
-            </Box>
-        </Box>
+            {/* Button to toggle drawer on mobile */}
+            <Button
+                type="primary"
+                icon={<MenuOutlined />}
+                onClick={() => setDrawerVisible(true)}
+                style={{ position: 'fixed', bottom: 20, right: 20 }}
+            />
+        </Layout>
     );
 };
 

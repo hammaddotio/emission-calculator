@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, TextField, MenuItem, Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { MOBILE_COMBUSTION_API } from '../../../../utils/api/apis';
 import { headers } from './../../../../utils/api/apiHeaders';
-import { toast } from 'react-hot-toast';
+import { Select, Table, Button, Typography, InputNumber, message } from 'antd';
+import { Option } from 'antd/lib/mentions';
 
 interface FuelRecord {
     fuelType: string;
@@ -34,8 +34,7 @@ const FuelEmissionCalculator: React.FC = () => {
         { label: 'CNG', value: 'CNG', co2EmissionFactor: 2.78, ch4EmissionFactor: 0, n2oEmissionFactor: 0 },
     ];
 
-    const handleFuelTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        const value = event.target.value as string;
+    const handleFuelTypeChange = (value: string) => {
         setSelectedFuelType(value);
         addNewRow(value);
     };
@@ -59,9 +58,9 @@ const FuelEmissionCalculator: React.FC = () => {
         }
     };
 
-    const handleChange = (index: number, field: keyof FuelRecord, value: string) => {
-        const newRecords: any = [...fuelRecords];
-        const parsedValue = parseFloat(value);
+    const handleChange = (index: number, field: keyof FuelRecord, value: string | number | null) => {
+        const newRecords: FuelRecord[] | any = [...fuelRecords];
+        const parsedValue = value === null ? 0 : parseFloat(value.toString());
 
         newRecords[index][field] = parsedValue;
 
@@ -99,100 +98,134 @@ const FuelEmissionCalculator: React.FC = () => {
         try {
             const payload = { fuelRecords, ...totals };
             const response = await axios.post(`${MOBILE_COMBUSTION_API}`, payload, headers);
-            console.log(response)
+            console.log(response);
 
-            // Show success toast
-            toast.success('Fuel records submitted successfully!');
+            // Show success message
+            message.success('Fuel records submitted successfully!');
 
             // Reset all state variables after successful submission
             setFuelRecords([]); // Reset fuel records to an empty array
-            setSelectedFuelType(''); // Clear selected fuel type
-            // Optionally reset other state variables if necessary
+            setSelectedFuelType(undefined); // Clear selected fuel type
         } catch (error: any) {
-            // Show error toast
-            toast.error('Failed to submit fuel records. Please try again.');
+            // Show error message
+            message.error('Failed to submit fuel records. Please try again.');
         } finally {
             setLoading(false); // Stop loading state
         }
     };
 
-
     const isButtonDisabled = fuelRecords.length === 0 || fuelRecords.some(record => record.amount === 0);
 
-    return (
-        <div className="p-4 mx-auto">
-            <h1 className="text-center text-2xl font-bold mb-4">Fuel Emission Calculator</h1>
+    // Define columns for the Ant Design Table
+    const columns = [
+        {
+            title: 'Fuel Type',
+            dataIndex: 'fuelType',
+            key: 'fuelType',
+        },
+        {
+            title: 'Amount (Liters)',
+            dataIndex: 'amount',
+            key: 'amount',
+            render: (_: number, record: FuelRecord, index: number) => (
+                <InputNumber
+                    min={0}
+                    value={record.amount}
+                    onChange={(value) => handleChange(index, 'amount', value)}
+                    placeholder="Enter amount"
+                    className="w-full" // Make InputNumber full width
+                />
+            ),
+        },
+        {
+            title: 'CO₂ Emissions (kg)',
+            dataIndex: 'co2Emissions',
+            key: 'co2Emissions',
+            render: (text: number) => text.toFixed(3),
+        },
+        {
+            title: 'CH₄ Emissions (kg)',
+            dataIndex: 'ch4Emissions',
+            key: 'ch4Emissions',
+            render: (text: number) => text.toFixed(3),
+        },
+        {
+            title: 'N₂O Emissions (kg)',
+            dataIndex: 'n2oEmissions',
+            key: 'n2oEmissions',
+            render: (text: number) => text.toFixed(3),
+        },
+        {
+            title: 'Total Emissions (kg)',
+            dataIndex: 'totalEmissions',
+            key: 'totalEmissions',
+            render: (text: number) => text.toFixed(3),
+        },
+    ];
 
-            <TextField
-                select
-                label="Select Fuel Type"
-                value={selectedFuelType || ''}
+    return (
+        <div className="p-6 mx-auto max-w-full bg-white rounded-lg shadow-lg border border-gray-300">
+            <Typography.Title level={3} className="text-center mb-4 text-blue-600 font-semibold text-lg sm:text-2xl">
+                Fuel Emission Calculator
+            </Typography.Title>
+
+            <Select
+                value={selectedFuelType || 'Select a fuel type'}
+                // mode="multiple"
                 onChange={handleFuelTypeChange}
-                variant="outlined"
+                placeholder="Select a fuel type"
                 className="mb-4 w-full"
+                allowClear
+                size='large'
+                style={{ width: '100%' }}
             >
                 {fuelOptions.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <Option key={option.value} value={option.value}>
                         {option.label}
-                    </MenuItem>
+                    </Option>
                 ))}
-            </TextField>
+            </Select>
 
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Fuel Type</TableCell>
-                        <TableCell>Amount (liters)</TableCell>
-                        <TableCell>CO₂ Emission Factor</TableCell>
-                        <TableCell>CH₄ Emission Factor</TableCell>
-                        <TableCell>N₂O Emission Factor</TableCell>
-                        <TableCell>CO₂ Emissions (kg)</TableCell>
-                        <TableCell>CH₄ Emissions (kg)</TableCell>
-                        <TableCell>N₂O Emissions (kg)</TableCell>
-                        <TableCell>Total Emissions (kg CO₂e)</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {fuelRecords.map((record, index) => (
-                        <TableRow key={record.fuelType}>
-                            <TableCell>{record.fuelType}</TableCell>
-                            <TableCell>
-                                <TextField
-                                    type="number"
-                                    value={record.amount}
-                                    onChange={(e) => handleChange(index, 'amount', e.target.value)}
-                                    variant="outlined"
-                                    className="w-full"
-                                />
-                            </TableCell>
-                            <TableCell>{record.co2EmissionFactor}</TableCell>
-                            <TableCell>{record.ch4EmissionFactor}</TableCell>
-                            <TableCell>{record.n2oEmissionFactor}</TableCell>
-                            <TableCell>{record.co2Emissions.toFixed(3)}</TableCell>
-                            <TableCell>{record.ch4Emissions.toFixed(3)}</TableCell>
-                            <TableCell>{record.n2oEmissions.toFixed(3)}</TableCell>
-                            <TableCell>{record.totalEmissions.toFixed(3)}</TableCell>
-                        </TableRow>
-                    ))}
-                    <TableRow>
-                        <TableCell colSpan={5}>Total</TableCell>
-                        <TableCell>{totals.co2Emissions.toFixed(3)}</TableCell>
-                        <TableCell>{totals.ch4Emissions.toFixed(3)}</TableCell>
-                        <TableCell>{totals.n2oEmissions.toFixed(3)}</TableCell>
-                        <TableCell>{totals.totalEmissions.toFixed(3)}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <div className="overflow-x-auto">
+                <Table
+                    dataSource={fuelRecords}
+                    columns={columns}
+                    pagination={false}
+                    rowKey={(record) => record.fuelType + Math.random()}
+                    bordered
+                    summary={() => (
+                        <Table.Summary>
+                            <Table.Summary.Row>
+                                <Table.Summary.Cell index={0} colSpan={2} className="font-bold text-gray-800">Total</Table.Summary.Cell>
+                                <Table.Summary.Cell index={4} className="text-green-600 font-semibold">
+                                    {totals.co2Emissions.toFixed(3)}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={5} className="text-red-600 font-semibold">
+                                    {totals.ch4Emissions.toFixed(3)}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={6} className="text-yellow-600 font-semibold">
+                                    {totals.n2oEmissions.toFixed(3)}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={7} className="text-blue-800 font-semibold">
+                                    {totals.totalEmissions.toFixed(3)}
+                                </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                        </Table.Summary>
+                    )}
+                />
+            </div>
 
             <Button
-                variant="contained"
-                color="primary"
+                type="primary"
                 onClick={handleSubmit}
-                disabled={isButtonDisabled || loading}
-                className="mt-4"
+                loading={loading}
+                disabled={isButtonDisabled}
+                className=" mt-4 px-8"
+            // size='large'
             >
-                {loading ? <CircularProgress size={24} /> : 'Submit'}
+                Submit
             </Button>
+
         </div>
     );
 };

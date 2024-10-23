@@ -6,8 +6,8 @@ import MobileCombustionDescription from './MobileCombustionDescription';
 const MobileCombustionWrapper: React.FC = () => {
     return (
         <div>
-            <MobileCombustionDescription />
             <MobileCombustionCalculator />
+            <MobileCombustionDescription />
             <MobileCombustionCalculatedData />
         </div>
     )

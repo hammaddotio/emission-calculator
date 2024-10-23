@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Select, message, Empty, Input } from "antd";
+import { Table, Button, Select, message, Empty, Input, Typography } from "antd";
 import axios from "axios";
 import { FIRE_SUPPRESSANT_API } from "../../../../utils/api/apis";
 import { headers } from "../../../../utils/api/apiHeaders";
-import SelectOption from "../../calculatorComponents/SelectOption";
 
 interface GasData {
     key: string;
@@ -275,61 +274,67 @@ const FireSuppressants: React.FC = () => {
     ];
 
     return (
-        <div className="container mx-auto p-4 rounded-lg shadow-md max-w-full sm:max-w-2xl lg:max-w-4xl">
-            <h2 className="text-2xl font-bold mb-4 text-center text-blue-600">
+        <div className="p-6 mx-auto max-w-full bg-white rounded-lg shadow-lg border border-gray-300">
+            <Typography.Title level={3} className="text-center mb-4 text-blue-600 font-semibold text-lg sm:text-2xl">
                 Fire Suppressants CO₂ Calculator
-            </h2>
+            </Typography.Title>
 
-            <SelectOption
+            <Select
                 onChange={handleSelectionChange}
-                placeholder={'Select gases'}
+                placeholder="Select gases"
+                className="mb-4 w-full"
+                size="large"
+                mode="multiple"
             >
                 {initialData.map((item) => (
                     <Option key={item.key} value={item.key}>
                         {item.gas}
                     </Option>
                 ))}
-            </SelectOption>
+            </Select>
 
-            <Table
-                columns={columns}
-                dataSource={selectedKeys.length >= 0 ? filteredData : []}
-                pagination={false}
-                className="w-full border border-blue-200 rounded-lg shadow-sm mb-6 bg-white"
-                locale={{
-                    emptyText: (
-                        <Empty description="No data" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    ),
-                }}
-            />
+            <div className="overflow-auto">
+                <Table
+                    columns={columns}
+                    dataSource={selectedKeys.length >= 0 ? filteredData : []}
+                    pagination={false}
+                    locale={{
+                        emptyText: (
+                            <Empty description="No data" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        ),
+                    }}
+                    summary={() => (
+                        <Table.Summary>
+                            <Table.Summary.Row>
+                                <Table.Summary.Cell index={0} colSpan={2} className="font-bold text-gray-800">Total</Table.Summary.Cell>
+                                <Table.Summary.Cell index={3} className="text-right font-bold text-blue-700">
+                                    {totals.totalInventoryChange}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={4} className="text-right font-bold text-blue-700">
+                                    {totals.totalTransferredAmount}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={5} className="text-right font-bold text-blue-700">
+                                    {totals.totalCapacityChange}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={6} className="text-right font-bold text-blue-700">
+                                    {totals.totalCO2Equivalent.toFixed(2)}
+                                </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                        </Table.Summary>
+                    )}
+                />
+            </div>
+
+
 
             {selectedKeys.length > 0 && (
                 <>
-                    <div className="w-full p-4 bg-blue-50 rounded-lg shadow-sm">
-                        <p className="font-bold mb-2 flex justify-between text-blue-700">
-                            <span>Total Inventory Change:</span>
-                            <span>{totals.totalInventoryChange}</span>
-                        </p>
-                        <p className="font-bold mb-2 flex justify-between text-blue-700">
-                            <span>Total Transferred Amount:</span>
-                            <span>{totals.totalTransferredAmount}</span>
-                        </p>
-                        <p className="font-bold mb-2 flex justify-between text-blue-700">
-                            <span>Total Capacity Change:</span>
-                            <span>{totals.totalCapacityChange}</span>
-                        </p>
-                        <p className="font-bold mb-2 flex justify-between text-blue-700">
-                            <span>Total CO₂ Equivalent:</span>
-                            <span>{totals.totalCO2Equivalent.toFixed(2)}</span>
-                        </p>
-                    </div>
-
-                    <div className="text-center mt-6">
+                    <div className="">
                         <Button
                             type="primary"
                             loading={loading}
                             onClick={handleSubmit}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-300"
+                            className="mt-4 px-8"
                             disabled={!checkAllInputsValid()}
                         >
                             Submit
@@ -338,6 +343,7 @@ const FireSuppressants: React.FC = () => {
                 </>
             )}
         </div>
+
 
     );
 };

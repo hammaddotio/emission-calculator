@@ -6,8 +6,8 @@ import PurchasedGasDescription from './PurchasedGasDescription';
 const PurchasedGasWrapper: React.FC = () => {
     return (
         <div>
-            <PurchasedGasDescription />
             <FireSuppressantsCalculator />
+            <PurchasedGasDescription />
             <FireSuppressantsCalculatedData />
         </div>
     )
